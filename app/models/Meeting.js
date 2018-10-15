@@ -13,6 +13,7 @@ let meetingSchema = new Schema({
         index: true,
         unique: true
     },
+    creator: String,
     title: {
         type: String,
         default: ''
@@ -27,10 +28,10 @@ let meetingSchema = new Schema({
             default: ''
         }
     },
-    alert: [
-        { 
-            alertType: String, 
-            minutes: Number 
+    alerts: [
+        {
+            alertType: String,
+            minutes: Number
         }
     ],
     location: {
@@ -41,13 +42,14 @@ let meetingSchema = new Schema({
         type: String,
         default: ''
     },
-    invitees: {
-        type: Number,
-        default: 0
-    },
-    createdOn: {
+    invitees: [],
+    created: {
         type: Date,
-        default: ""
+        default: Date.now
+    },
+    lastModified: {
+        type: Date,
+        default: Date.now
     }
 
 })

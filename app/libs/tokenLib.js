@@ -11,7 +11,7 @@ let generateToken = (data, cb) => {
       iat: Date.now(),
       exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24),
       sub: 'authToken',
-      iss: 'edChat',
+      iss: 'meetingPlanner',
       data: data
     }
     let tokenDetails = {
@@ -63,9 +63,6 @@ let verifyClaimWithoutSecret = (token,cb) => {
 
 
 }// end verify claim 
-
-
-
 
 module.exports = {
   generateToken: generateToken,

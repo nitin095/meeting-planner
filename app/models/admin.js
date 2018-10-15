@@ -6,8 +6,8 @@ const mongoose = require('mongoose'),
   Schema = mongoose.Schema;
 
 // Schema Declaration
-let userSchema = new Schema({
-  userId: {
+let adminSchema = new Schema({
+  adminId: {
     type: String,
     default: '',
     index: true,
@@ -46,4 +46,4 @@ let userSchema = new Schema({
 })
 
 
-mongoose.model('User', userSchema);
+mongoose.model('Admin', adminSchema);

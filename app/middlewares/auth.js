@@ -10,7 +10,6 @@ const check = require('./../libs/checkLib')
 
 let isAuthorized = (req, res, next) => {
   
-
   if (req.params.authToken || req.query.authToken || req.body.authToken || req.header('authToken')) {
     Auth.findOne({authToken: req.header('authToken') || req.params.authToken || req.body.authToken || req.query.authToken}, (err, authDetails) => {
       if (err) {
