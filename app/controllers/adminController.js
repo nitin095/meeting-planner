@@ -86,11 +86,11 @@ let editAdmin = (req, res) => {
     adminModel.update({ 'adminId': req.params.adminId }, options).exec((err, result) => {
         if (err) {
             console.log(err)
-            logger.error(err.message, 'Admin Controller:editUser', 10)
+            logger.error(err.message, 'Admin Controller:editAdmin', 10)
             let apiResponse = response.generate(true, 'Failed To edit Admin details', 500, null)
             res.send(apiResponse)
         } else if (check.isEmpty(result)) {
-            logger.info('No Admin Found', 'Admin Controller: editUser')
+            logger.info('No Admin Found', 'Admin Controller: editAdmin')
             let apiResponse = response.generate(true, 'No Admin Found', 404, null)
             res.send(apiResponse)
         } else {
@@ -120,23 +120,23 @@ let signUpFunction = (req, res) => {
                     resolve(req)
                 }
             } else {
-                logger.error('Field Missing During User Creation', 'userController: createUser()', 5)
+                logger.error('Field Missing During Admin Creation', 'AdminController: createAdmin()', 5)
                 let apiResponse = response.generate(true, 'One or More Parameter(s) is missing', 400, null)
                 reject(apiResponse)
             }
         })
-    }// end validate user input
+    }// end validate admin input
     let createAdmin = () => {
         return new Promise((resolve, reject) => {
             adminModel.findOne({ email: req.body.email })
-                .exec((err, retrievedUserDetails) => {
+                .exec((err, retrievedAdminDetails) => {
                     if (err) {
                         logger.error(err.message, 'adminController: createAdmin', 10)
                         let apiResponse = response.generate(true, 'Failed To Create Admin', 500, null)
                         reject(apiResponse)
-                    } else if (check.isEmpty(retrievedUserDetails)) {
+                    } else if (check.isEmpty(retrievedAdminDetails)) {
                         console.log(req.body)
-                        let newAdmin = new UserModel({
+                        let newAdmin = new adminModel({
                             adminId: shortid.generate(),
                             firstName: req.body.firstName,
                             lastName: req.body.lastName || '',
@@ -145,15 +145,15 @@ let signUpFunction = (req, res) => {
                             password: passwordLib.hashpassword(req.body.password),
                             createdOn: time.now()
                         })
-                        newAdmin.save((err, newUser) => {
+                        newAdmin.save((err, newAdmin) => {
                             if (err) {
                                 console.log(err)
                                 logger.error(err.message, 'adminController: createAdmin', 10)
                                 let apiResponse = response.generate(true, 'Failed to create new admin', 500, null)
                                 reject(apiResponse)
                             } else {
-                                let newUserObj = newUser.toObject();
-                                resolve(newUserObj)
+                                let newAdminObj = newAdmin.toObject();
+                                resolve(newAdminObj)
                             }
                         })
                     } else {
@@ -192,13 +192,13 @@ let loginFunction = (req, res) => {
                         console.log(err)
                         logger.error('Failed To Retrieve Admin Data', 'adminController: findAdmin()', 10)
                         /* generate the error message and the api response message here */
-                        let apiResponse = response.generate(true, 'Failed To Find User Details', 500, null)
+                        let apiResponse = response.generate(true, 'Failed To Find admin Details', 500, null)
                         reject(apiResponse)
                         /* if Company Details is not found */
                     } else if (check.isEmpty(adminDetails)) {
                         /* generate the response and the console error message here */
                         logger.error('No admin Found', 'adminController: findAdmin()', 7)
-                        let apiResponse = response.generate(true, 'No User Details Found', 404, null)
+                        let apiResponse = response.generate(true, 'No admin Details Found', 404, null)
                         reject(apiResponse)
                     } else {
                         /* prepare the message and the api response here */
@@ -223,13 +223,13 @@ let loginFunction = (req, res) => {
                     let apiResponse = response.generate(true, 'Login Failed', 500, null)
                     reject(apiResponse)
                 } else if (isMatch) {
-                    let retrievedAdminDetails = retrievedAdminDetails.toObject()
-                    delete retrievedAdminDetails.password
-                    delete retrievedAdminDetails._id
-                    delete retrievedAdminDetails.__v
-                    delete retrievedAdminDetails.createdOn
-                    delete retrievedAdminDetails.modifiedOn
-                    resolve(retrievedAdminDetails)
+                    let retrievedAdminDetailsObj = retrievedAdminDetails.toObject()
+                    delete retrievedAdminDetailsObj.password
+                    delete retrievedAdminDetailsObj._id
+                    delete retrievedAdminDetailsObj.__v
+                    delete retrievedAdminDetailsObj.createdOn
+                    delete retrievedAdminDetailsObj.modifiedOn
+                    resolve(retrievedAdminDetailsObj)
                 } else {
                     logger.info('Login Failed Due To Invalid Password', 'adminController: validatePassword()', 10)
                     let apiResponse = response.generate(true, 'Wrong Password.Login Failed', 400, null)
@@ -248,8 +248,8 @@ let loginFunction = (req, res) => {
                     let apiResponse = response.generate(true, 'Failed To Generate Token', 500, null)
                     reject(apiResponse)
                 } else {
-                    tokenDetails.userId = adminDetails.userId
-                    tokenDetails.userDetails = adminDetails
+                    tokenDetails.adminId = adminDetails.adminId
+                    tokenDetails.adminDetails = adminDetails
                     resolve(tokenDetails)
                 }
             })
@@ -265,7 +265,7 @@ let loginFunction = (req, res) => {
                     reject(apiResponse)
                 } else if (check.isEmpty(retrievedTokenDetails)) {
                     let newAuthToken = new AuthModel({
-                        userId: tokenDetails.userId,
+                        adminId: tokenDetails.adminId,
                         authToken: tokenDetails.token,
                         tokenSecret: tokenDetails.tokenSecret,
                         tokenGenerationTime: time.now()
@@ -279,7 +279,7 @@ let loginFunction = (req, res) => {
                         } else {
                             let responseBody = {
                                 authToken: newTokenDetails.authToken,
-                                userDetails: tokenDetails.userDetails
+                                adminDetails: tokenDetails.adminDetails
                             }
                             resolve(responseBody)
                         }
@@ -297,7 +297,7 @@ let loginFunction = (req, res) => {
                         } else {
                             let responseBody = {
                                 authToken: newTokenDetails.authToken,
-                                userDetails: tokenDetails.adminDetails
+                                adminDetails: tokenDetails.adminDetails
                             }
                             resolve(responseBody)
                         }
@@ -307,7 +307,7 @@ let loginFunction = (req, res) => {
         })
     }
 
-    findUser(req,res)
+    findAdmin(req,res)
         .then(validatePassword)
         .then(generateToken)
         .then(saveToken)
@@ -330,14 +330,14 @@ let loginFunction = (req, res) => {
 
 
 /**
- * function to logout user.
- * auth params: userId.
+ * function to logout admin.
+ * auth params: adminId.
  */
 let logout = (req, res) => {
   AuthModel.findOneAndRemove({adminId: req.admin.adminId}, (err, result) => {
     if (err) {
         console.log(err)
-        logger.error(err.message, 'user Controller: logout', 10)
+        logger.error(err.message, 'Admin Controller: logout', 10)
         let apiResponse = response.generate(true, `error occurred: ${err.message}`, 500, null)
         res.send(apiResponse)
     } else if (check.isEmpty(result)) {

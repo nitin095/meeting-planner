@@ -4,10 +4,11 @@ const time = require('./../libs/timeLib');
 const passwordLib = require('./../libs/generatePasswordLib');
 const response = require('./../libs/responseLib')
 const logger = require('./../libs/loggerLib');
-const validateInput = require('../libs/paramsValidationLib')
-const check = require('../libs/checkLib')
-const token = require('../libs/tokenLib')
-const AuthModel = mongoose.model('Auth')
+const validateInput = require('../libs/paramsValidationLib');
+const check = require('../libs/checkLib');
+const token = require('../libs/tokenLib');
+const AuthModel = mongoose.model('Auth');
+const mailer = require('../libs/mailer')
 
 /* Models */
 const UserModel = mongoose.model('User')
@@ -141,6 +142,7 @@ let signUpFunction = (req, res) => {
                             firstName: req.body.firstName,
                             lastName: req.body.lastName || '',
                             email: req.body.email.toLowerCase(),
+                            countryCode: req.body.countryCode,
                             mobileNumber: req.body.mobileNumber,
                             password: passwordLib.hashpassword(req.body.password),
                             createdOn: time.now()
@@ -314,6 +316,7 @@ let loginFunction = (req, res) => {
         .then(generateToken)
         .then(saveToken)
         .then((resolve) => {
+            mailer.sendWelcomeMail(resolve.userDetails);
             let apiResponse = response.generate(false, 'Login Successful', 200, resolve)
             res.status(200)
             res.send(apiResponse)

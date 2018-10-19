@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const shortid = require('shortid');
+var schedule = require('node-schedule');
 const time = require('./../libs/timeLib');
 const passwordLib = require('./../libs/generatePasswordLib');
 const response = require('./../libs/responseLib')
@@ -8,13 +9,14 @@ const validateInput = require('../libs/paramsValidationLib')
 const check = require('../libs/checkLib')
 const token = require('../libs/tokenLib')
 const AuthModel = mongoose.model('Auth')
+const mailer = require('./../libs/mailer')
 
 /* Models */
 const MeetingModel = mongoose.model('Meeting')
 
 /* Get single meeing details */
 let getMeeting = (req, res) => {
-    MeetingModel.findOne({ 'userId': req.params.meetingId })
+    MeetingModel.findOne({ 'meetingId': req.params.meetingId })
         .select('-password -__v -_id')
         .lean()
         .exec((err, result) => {
@@ -28,7 +30,7 @@ let getMeeting = (req, res) => {
                 let apiResponse = response.generate(true, 'No Meeting Found', 404, null)
                 res.send(apiResponse)
             } else {
-                let apiResponse = response.generate(false, 'Meeting Details Found', 200, result)
+                let apiResponse = response.generate(false, 'Meeting Details Found', 200, result);
                 res.send(apiResponse)
             }
         })
@@ -110,7 +112,7 @@ let getMeetingsByMonth = (req, res) => {
  * function to read all meetings by month.
  */
 let getMeetingsByDate = (req, res) => {
-    MeetingModel.find({ "time.start": { "$gte": new Date(req.params.year, req.params.month, req.params.day), "$lt": new Date(req.params.year, req.params.month, req.params.day+1) } })
+    MeetingModel.find({ "time.start": { "$gte": new Date(req.params.year, req.params.month, req.params.day), "$lt": new Date(req.params.year, req.params.month, req.params.day + 1) } })
         .select('-__v -_id')
         .lean()
         .exec((err, result) => {
@@ -186,8 +188,19 @@ let createMeeting = (req, res) => {
     // making promise call.
     newMeeting()
         .then((result) => {
-            let apiResponse = response.generate(false, 'Meeting Created successfully', 200, result)
-            res.send(apiResponse)
+            let apiResponse = response.generate(false, 'Meeting Created successfully', 200, result);
+            res.send(apiResponse);
+            schedule.scheduleJob(time.getTimeAfter(0.5), function(){
+                mailer.sendNewMeetingMail(result)
+            });
+            for (let alert of result.alerts) {
+                if (alert.alertType == 'email') {
+                    console.log(`Email alert set: ${alert.minutes} minutes before.`);
+                    schedule.scheduleJob(time.getTimeBefore(result.time.start,alert.minutes), function () {
+                        mailer.sendNotification(result)
+                    });
+                }
+            }
         })
         .catch((error) => {
             console.log(error)
@@ -210,7 +223,10 @@ let editMeeting = (req, res) => {
             res.send(apiResponse)
         } else {
             let apiResponse = response.generate(false, 'Meeting details edited', 200, result)
-            res.send(apiResponse)
+            res.send(apiResponse);
+            schedule.scheduleJob(time.getTimeAfter(1), function(){
+                mailer.sendMeetingUpdateMail(result)
+            });
         }
     });// end user model update
 
@@ -244,7 +260,7 @@ let deleteMeeting = (req, res) => {
 module.exports = {
 
     getMeeting: getMeeting,
-    getAllMeetings:getAllMeetings,
+    getAllMeetings: getAllMeetings,
     getMeetingsByYear: getMeetingsByYear,
     getMeetingsByMonth: getMeetingsByMonth,
     getMeetingsByDate: getMeetingsByDate,
