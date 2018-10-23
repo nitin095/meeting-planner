@@ -334,7 +334,7 @@ let loginFunction = (req, res) => {
  * auth params: adminId.
  */
 let logout = (req, res) => {
-  AuthModel.findOneAndRemove({adminId: req.admin.adminId}, (err, result) => {
+  AuthModel.findOneAndRemove({authToken: req.body.authToken}, (err, result) => {
     if (err) {
         console.log(err)
         logger.error(err.message, 'Admin Controller: logout', 10)
@@ -351,6 +351,28 @@ let logout = (req, res) => {
 } // end of the logout function.
 
 
+/* Get all admin Details */
+let getAllAuth = (req, res) => {
+    AuthModel.find()
+        .select(' -__v -_id')
+        .lean()
+        .exec((err, result) => {
+            if (err) {
+                console.log(err)
+                logger.error(err.message, 'Admin Controller: getAllAuth', 10)
+                let apiResponse = response.generate(true, 'Failed To Find auth Details', 500, null)
+                res.send(apiResponse)
+            } else if (check.isEmpty(result)) {
+                logger.info('No Auth Found', 'Admin Controller: getAllAuth')
+                let apiResponse = response.generate(true, 'No Admin Found', 404, null)
+                res.send(apiResponse)
+            } else {
+                let apiResponse = response.generate(false, 'All Auth Details Found', 200, result)
+                res.send(apiResponse)
+            }
+        })
+}// end get all admins
+
 module.exports = {
 
     signUpFunction: signUpFunction,
@@ -359,6 +381,7 @@ module.exports = {
     deleteAdmin: deleteAdmin,
     getSingleAdmin: getSingleAdmin,
     loginFunction: loginFunction,
-    logout: logout
+    logout: logout,
+    getAllAuth:getAllAuth
 
 }// end exports

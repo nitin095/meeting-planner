@@ -1,0 +1,22 @@
+<div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-4">Meet Pad</h1>
+    <p class="lead">Get track of all your meetings and get notified.</p>
+  </div>
+</div>
+
+<div class="container mb-5">
+  <div class="row">
+    <form #createLoginForm="ngForm" (ngSubmit)="login()">
+      <div class="form-group">
+        <label for="exampleInputEmail1">Email address</label>
+        <input type="email" name="email" class="form-control" [(ngModel)]="email" placeholder="Enter email" >
+      </div>
+      <div class="form-group">
+        <label for="exampleInputPassword1">Password</label>
+        <input type="password" name="password" class="form-control" [(ngModel)]="password" placeholder="Password">
+      </div>
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+  </div>
+</div>

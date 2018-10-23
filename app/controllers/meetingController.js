@@ -37,7 +37,8 @@ let getMeeting = (req, res) => {
 }// end get single user
 
 let getAllMeetings = (req, res) => {
-    MeetingModel.find()
+    console.log(req.query.userId)
+    MeetingModel.find({'invitees' : req.query.userId})
         .select('-__v -_id')
         .lean()
         .exec((err, result) => {
@@ -51,12 +52,34 @@ let getAllMeetings = (req, res) => {
                 let apiResponse = response.generate(true, 'No Meeting Found', 404, null)
                 res.send(apiResponse)
             } else {
-                let apiResponse = response.generate(false, 'All Meeting Details Found', 200, result)
+                let apiResponse = response.generate(false, 'All Meetings Details Found', 200, result)
                 res.send(apiResponse)
             }
         })
 }// end get all blogs
 
+
+let getAllMeetingsByAdmin = (req, res) => {
+    console.log(req.query.adminId)
+    MeetingModel.find({'creator' : req.query.adminId})
+        .select('-__v -_id')
+        .lean()
+        .exec((err, result) => {
+            if (err) {
+                console.log(err)
+                logger.error(err.message, 'Meeting Controller: getAllMeetings', 10)
+                let apiResponse = response.generate(true, 'Failed To Find Meeting Details', 500, null)
+                res.send(apiResponse)
+            } else if (check.isEmpty(result)) {
+                logger.info('No Meeting Found', 'Meeting Controller: getAllMeetings')
+                let apiResponse = response.generate(true, 'No Meeting Found', 404, null)
+                res.send(apiResponse)
+            } else {
+                let apiResponse = response.generate(false, 'All Meetings Details Found', 200, result)
+                res.send(apiResponse)
+            }
+        })
+}// end get all blogs
 
 /**
  * function to read all meetings by year.
@@ -148,6 +171,7 @@ let createMeeting = (req, res) => {
                 let meetingId = shortid.generate()
                 let newMeeting = new MeetingModel({
                     meetingId: meetingId,
+                    creator: req.body.creator,
                     title: req.body.title,
                     notes: req.body.notes,
                     time: { start: req.body.startTime, end: req.body.endTime },
@@ -261,6 +285,7 @@ module.exports = {
 
     getMeeting: getMeeting,
     getAllMeetings: getAllMeetings,
+    getAllMeetingsByAdmin: getAllMeetingsByAdmin,
     getMeetingsByYear: getMeetingsByYear,
     getMeetingsByMonth: getMeetingsByMonth,
     getMeetingsByDate: getMeetingsByDate,

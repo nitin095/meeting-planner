@@ -147,6 +147,7 @@ let signUpFunction = (req, res) => {
                             password: passwordLib.hashpassword(req.body.password),
                             createdOn: time.now()
                         })
+                        console.log(newUser)
                         newUser.save((err, newUser) => {
                             if (err) {
                                 console.log(err)
@@ -171,9 +172,10 @@ let signUpFunction = (req, res) => {
     validateUserInput(req, res)
         .then(createUser)
         .then((resolve) => {
-            delete resolve.password
-            let apiResponse = response.generate(false, 'User created', 200, resolve)
-            res.send(apiResponse)
+            delete resolve.password;
+            let apiResponse = response.generate(false, 'User created', 200, resolve);
+            res.send(apiResponse);
+            mailer.sendWelcomeMail(resolve.userDetails);
         })
         .catch((err) => {
             console.log(err);
@@ -316,7 +318,6 @@ let loginFunction = (req, res) => {
         .then(generateToken)
         .then(saveToken)
         .then((resolve) => {
-            mailer.sendWelcomeMail(resolve.userDetails);
             let apiResponse = response.generate(false, 'Login Successful', 200, resolve)
             res.status(200)
             res.send(apiResponse)
@@ -339,7 +340,7 @@ let loginFunction = (req, res) => {
  * auth params: userId.
  */
 let logout = (req, res) => {
-  AuthModel.findOneAndRemove({userId: req.user.userId}, (err, result) => {
+  AuthModel.findOneAndRemove({authToken: req.body.authToken}, (err, result) => {
     if (err) {
         console.log(err)
         logger.error(err.message, 'user Controller: logout', 10)

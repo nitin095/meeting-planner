@@ -1,0 +1,56 @@
+<div class="container">
+  <div class="row justify-content-between">
+    <div class="col-auto display-1">
+      Hi! {{adminDetails.firstName}} {{adminDetails.lastName}}
+    </div>
+    <div class="col-2 p-2">
+        <button type="button" class="btn btn-outline-danger" (click)="logout()">Logout</button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col display-4" *ngIf="allMeetings">
+      You have {{allMeetings.length}} meetings.
+    </div>
+    <div class="col display-4" *ngIf="!allMeetings">
+      You have no meetings.
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-4" *ngFor="let meeting of allMeetings">
+      <div class="card m-2 p-3">
+        <div class="lead">
+          {{meeting.title}}
+        </div>
+        <small>{{meeting.time.start | date:'d LLL yyy h:m a'}}</small>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container my-5" *ngIf="allUsers">
+  <div class="row">
+    <div class="col">
+      <h2>Users</h2>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-4" *ngFor="let user of allUsers">
+      <div class="card m-2 p-3">
+        <span class="lead">{{user.firstName}} {{user.lastName}}</span>
+        <small>{{user.email}}</small>
+        <small>{{user.mobileNumber}}</small>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container my-5">
+  <div class="row justify-content-end">
+    <div class="col-2">
+        <button type="button" class="btn btn-outline-success" [routerLink]="['/admin/meeting/create']">Create new meeting</button>
+    </div>
+  </div>
+</div>

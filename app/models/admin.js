@@ -13,11 +13,6 @@ let adminSchema = new Schema({
     index: true,
     unique: true
   },
-  userName: {
-    type: String,
-    default: '',
-    unique: true
-  },
   firstName: {
     type: String,
     default: ''

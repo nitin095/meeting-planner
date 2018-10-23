@@ -19,6 +19,8 @@ module.exports.setRouter = (app) => {
 
     app.get(`${baseUrl}/all`,meetingController.getAllMeetings);
 
+    app.get(`${baseUrl}/all/admin`, meetingController.getAllMeetingsByAdmin);
+
     app.post(`${baseUrl}/create`,meetingController.createMeeting);
 
     app.get(`${baseUrl}/delete/:meetingId`,meetingController.deleteMeeting);

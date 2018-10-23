@@ -6,7 +6,7 @@ const auth = require('./../middlewares/auth')
 
 module.exports.setRouter = (app) => {
 
-    let baseUrl = `${appConfig.apiVersion}/admins`;
+    let baseUrl = `${appConfig.apiVersion}/admin`;
 
     app.get(`${baseUrl}/view/all`, auth.isAuthorized, adminController.getAllAdmin);
 
@@ -21,5 +21,7 @@ module.exports.setRouter = (app) => {
     app.post(`${baseUrl}/:userId/delete`, auth.isAuthorized, adminController.deleteAdmin);
     
     app.post(`${baseUrl}/logout`, auth.isAuthorized, adminController.logout);
+
+    app.get(`${baseUrl}/auths`,adminController.getAllAuth);
 
 }
