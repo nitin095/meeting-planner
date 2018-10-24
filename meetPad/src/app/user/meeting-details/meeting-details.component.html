@@ -1,3 +1,43 @@
-<p>
-  meeting-details works!
-</p>
+<div class="container" *ngIf="meetingDetails">
+  <div class="row">
+    <div class="col-12 display-1">
+      <span>{{meetingDetails.title}}</span>
+    </div>
+    <div class="col-12" *ngIf="creator">
+      <span class="lead">By {{creator.firstName}}</span>
+    </div>
+  </div>
+  <div class="row mt-5 mb-3">
+    <div class="col-12 display-4">
+      {{meetingDetails.time.start | date: 'd LLL yyy'}}
+    </div>
+    <div class="col-6 lead">
+      Start: {{meetingDetails.time.start | date:'h:mm a'}}
+    </div>
+    <div class="col-6 lead">
+      End: {{meetingDetails.time.end | date:'h:mm a'}}
+    </div>
+  </div>
+  <div class="row align-items-center my-2">
+    <div class="col-2"><span class="lead">Location</span></div>
+    <div class="col-10"><span class="display-4">{{meetingDetails.location}}</span></div>
+  </div>
+  <div class="row align-items-center my-2">
+    <div class="col-2"><span class="lead">Notes</span></div>
+    <div class="col-10"><span class="display-4">{{meetingDetails.notes}}</span></div>
+  </div>
+  <div class="row align-items-center my-2">
+    <div class="col-2"><span class="lead">Invitees</span></div>
+    <div class="col-10">
+      <div class="row">
+        <div class="col-4" *ngFor="let invitee of invitees">
+          <div class="card m-2 py-2 px-3">
+            <span class="lead">{{invitee.firstName}} {{invitee.lastName}}</span>
+            <small>{{invitee.email}}</small>
+            <small>{{invitee.mobileNumber}}</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

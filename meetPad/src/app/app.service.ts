@@ -9,6 +9,7 @@ import { Cookie } from 'ng2-cookies/ng2-cookies';
 export class AppService {
 
   private baseUrl = 'http://localhost:3000/api/v1';
+  private authToken = Cookie.get('authtoken');
 
   constructor(private _http: HttpClient) {
     console.log('app-service called')
@@ -44,10 +45,25 @@ export class AppService {
     return response
   }
 
+  getMeetingDetails(meetingId: string): Observable<any> {
+    let response = this._http.get(`${this.baseUrl}/meetings/${meetingId}/details`)
+    return response
+  }
+
   getAllAdminMeetings(adminId: string): Observable<any> {
     let response = this._http.get(`${this.baseUrl}/meetings/all/admin?adminId=${adminId}`)
     return response
   }
+
+getUser(userId): Observable<any> {
+  let response = this._http.get(`${this.baseUrl}/users/${userId}/details?authToken=${this.authToken}`)
+  return response
+}
+
+getAdmin(adminId): Observable<any> {
+  let response = this._http.get(`${this.baseUrl}/admin/${adminId}/details?authToken=${this.authToken}`)
+  return response
+}
 
   getAllUsers(authToken): Observable<any> {
     let response = this._http.get(`${this.baseUrl}/users/view/all?authToken=${authToken}`)
@@ -55,7 +71,6 @@ export class AppService {
   }
 
   public logout(userType): Observable<any> {
-    console.log( Cookie.get('authtoken'))
     const params = new HttpParams()
       .set('authToken', Cookie.get('authtoken'));
     return this._http.post(`${this.baseUrl}/${userType}/logout`, params);

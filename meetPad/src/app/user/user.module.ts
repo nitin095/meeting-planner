@@ -15,7 +15,8 @@ import { MeetingDetailsComponent } from './meeting-details/meeting-details.compo
     FullCalendarModule,
     RouterModule.forChild([
       { path: 'dashboard', component: DashboardComponent },
-      { path: 'signup', component: SignupComponent}
+      { path: 'signup', component: SignupComponent},
+      { path: 'meeting/:meetingId', component: MeetingDetailsComponent}
     ])
   ],
   declarations: [

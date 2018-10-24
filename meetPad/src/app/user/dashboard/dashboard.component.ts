@@ -65,7 +65,8 @@ export class DashboardComponent implements OnInit {
           for (let meeting of meetings) {
             events.push({
               title: meeting.title,
-              start: meeting.time.start
+              start: meeting.time.start,
+              meetingId: meeting.meetingId
             });
           }
           callback(events);
@@ -79,8 +80,9 @@ export class DashboardComponent implements OnInit {
     });
   }
 
-  eventClick = (event) => {
-    console.log(event)
+  eventClick = (meeting) => {
+    console.log(meeting.event);
+    this.router.navigate(['meeting',meeting.event.meetingId]);
   }
 
   dayClick = (event) => {
