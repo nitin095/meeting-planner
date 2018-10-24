@@ -14,10 +14,6 @@ import { NotFoundComponent } from './not-found/not-found.component';
 
 import { AppService } from "./app.service";
 
-
-import { CalendarModule, DateAdapter } from 'angular-calendar';
-import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -29,10 +25,6 @@ import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
     HttpClientModule,
     FormsModule,
     BrowserAnimationsModule,
-    CalendarModule.forRoot({
-      provide: DateAdapter,
-      useFactory: adapterFactory
-    }),
     AdminModule,
     UserModule,
     RouterModule.forRoot([

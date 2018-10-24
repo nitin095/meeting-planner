@@ -5,10 +5,14 @@ import { FormsModule } from '@angular/forms';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SignupComponent } from './signup/signup.component';
 
+import { FullCalendarModule } from 'ng-fullcalendar';
+import { MeetingDetailsComponent } from './meeting-details/meeting-details.component';
+
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
+    FullCalendarModule,
     RouterModule.forChild([
       { path: 'dashboard', component: DashboardComponent },
       { path: 'signup', component: SignupComponent}
@@ -16,7 +20,8 @@ import { SignupComponent } from './signup/signup.component';
   ],
   declarations: [
     DashboardComponent,
-    SignupComponent
+    SignupComponent,
+    MeetingDetailsComponent
   ]
 })
 export class UserModule { }
