@@ -56,6 +56,7 @@ export class AppService {
   }
 
 getUser(userId): Observable<any> {
+  console.log(`auth tokrn is ${this.authToken}`)
   let response = this._http.get(`${this.baseUrl}/users/${userId}/details?authToken=${this.authToken}`)
   return response
 }

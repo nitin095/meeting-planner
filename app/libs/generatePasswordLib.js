@@ -1,4 +1,6 @@
 const bcrypt = require('bcrypt')
+const cryptoRandomString = require('crypto-random-string');
+ 
 const saltRounds = 10
 
 /* Custom Library */
@@ -27,8 +29,13 @@ let comparePasswordSync = (myPlaintextPassword, hash) => {
   return bcrypt.compareSync(myPlaintextPassword, hash)
 }
 
+let generatePasswordResetToken = () => {
+  return cryptoRandomString(50);
+}
+
 module.exports = {
   hashpassword: hashpassword,
   comparePassword: comparePassword,
-  comparePasswordSync: comparePasswordSync
+  comparePasswordSync: comparePasswordSync,
+  generatePasswordResetToken: generatePasswordResetToken
 }

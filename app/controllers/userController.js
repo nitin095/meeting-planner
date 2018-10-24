@@ -103,6 +103,57 @@ let editUser = (req, res) => {
 
 }// end edit user
 
+let forgotPassword = (req, res) => {
+    let randomToken = passwordLib.generatePasswordResetToken();
+    console.log('random token is' + randomToken)
+    UserModel.update({ 'email': req.body.email }, { 'resetPasswordToken': randomToken, 'resetPasswordExpires': time.getTimeAfter(30) }).exec((err, result) => {
+        if (err) {
+            logger.error(err.message, 'User Controller:forgotPassword', 10)
+            let apiResponse = response.generate(true, 'Failed To find user email', 500, null)
+            res.send(apiResponse)
+        } else if (check.isEmpty(result)) {
+            logger.info('Email not Found', 'User Controller: forgotPassword')
+            let apiResponse = response.generate(true, 'No Email Found', 404, null)
+            res.send(apiResponse)
+        } else {
+            mailer.sendForgotPasswordEmail(req.body.email, randomToken)
+            let apiResponse = response.generate(false, 'Password change requested', 200, result)
+            res.send(apiResponse)
+        }
+    })
+}//end forgot password
+
+let resetPassword = (req, res) => {
+
+    let newPassword = passwordLib.hashpassword(req.body.password)
+    let now = Date.now()
+
+    UserModel.update({
+        'resetPasswordToken': req.body.token,
+        'resetPasswordExpires': {
+            $gt: now
+        }
+    }, {
+            'password': newPassword,
+            'resetPasswordToken': undefined,
+            'resetPasswordExpires': undefined
+        }).exec((err, result) => {
+            if (err) {
+                console.log(err)
+                logger.error(err.message, 'User Controller: resetPasssword', 10)
+                let apiResponse = response.generate(true, 'Failed To reset password', 500, null)
+                res.send(apiResponse)
+            } else if (check.isEmpty(result)) {
+                logger.info('Token is expired', 'User Controller: resetPasssword')
+                let apiResponse = response.generate(true, 'Token is expired', 404, null)
+                res.send(apiResponse)
+            } else {
+                let apiResponse = response.generate(false, 'User passwod changed', 200, result)
+                res.send(apiResponse)
+            }
+        })
+
+}// end change password
 
 // start user signup function 
 
@@ -192,7 +243,7 @@ let loginFunction = (req, res) => {
             if (req.body.email) {
                 console.log("req body email is there");
                 console.log(req.body);
-                UserModel.findOne({ email: req.body.email}, (err, userDetails) => {
+                UserModel.findOne({ email: req.body.email }, (err, userDetails) => {
                     /* handle the error here if the User is not found */
                     if (err) {
                         console.log(err)
@@ -212,7 +263,7 @@ let loginFunction = (req, res) => {
                         resolve(userDetails)
                     }
                 });
-               
+
             } else {
                 let apiResponse = response.generate(true, '"email" parameter is missing', 400, null)
                 reject(apiResponse)
@@ -313,7 +364,7 @@ let loginFunction = (req, res) => {
         })
     }
 
-    findUser(req,res)
+    findUser(req, res)
         .then(validatePassword)
         .then(generateToken)
         .then(saveToken)
@@ -340,20 +391,20 @@ let loginFunction = (req, res) => {
  * auth params: userId.
  */
 let logout = (req, res) => {
-  AuthModel.findOneAndRemove({authToken: req.body.authToken}, (err, result) => {
-    if (err) {
-        console.log(err)
-        logger.error(err.message, 'user Controller: logout', 10)
-        let apiResponse = response.generate(true, `error occurred: ${err.message}`, 500, null)
-        res.send(apiResponse)
-    } else if (check.isEmpty(result)) {
-        let apiResponse = response.generate(true, 'Already Logged Out or Invalid UserId', 404, null)
-        res.send(apiResponse)
-    } else {
-        let apiResponse = response.generate(false, 'Logged Out Successfully', 200, null)
-        res.send(apiResponse)
-    }
-  })
+    AuthModel.findOneAndRemove({ authToken: req.body.authToken }, (err, result) => {
+        if (err) {
+            console.log(err)
+            logger.error(err.message, 'user Controller: logout', 10)
+            let apiResponse = response.generate(true, `error occurred: ${err.message}`, 500, null)
+            res.send(apiResponse)
+        } else if (check.isEmpty(result)) {
+            let apiResponse = response.generate(true, 'Already Logged Out or Invalid UserId', 404, null)
+            res.send(apiResponse)
+        } else {
+            let apiResponse = response.generate(false, 'Logged Out Successfully', 200, null)
+            res.send(apiResponse)
+        }
+    })
 } // end of the logout function.
 
 
@@ -365,6 +416,8 @@ module.exports = {
     deleteUser: deleteUser,
     getSingleUser: getSingleUser,
     loginFunction: loginFunction,
-    logout: logout
+    logout: logout,
+    forgotPassword: forgotPassword,
+    resetPassword: resetPassword
 
 }// end exports

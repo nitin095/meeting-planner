@@ -120,11 +120,36 @@ let sendMeetingUpdateMail = (meetingDetails) => {
     });
 }//end sendNewMeetingMail
 
+
+let sendForgotPasswordEmail = (email,token) => {
+  
+    let mailOptions = {
+        from: 'sahil082018@gmail.com',
+        to: 'shokeennitin1995@gmail.com',
+        subject: `Reset your password`,
+        html: ` <h3>Hi!</h3>
+        <p>You requested for a password reset, kindly use this <a href="http://localhost:3000/resetPassword?token=${token}">link</a> to reset your password</p>
+        <p>This link is valid for 30 minutes.</p>
+        <br>
+        <p>Cheers!</p>`
+    };
+
+    // send mail with defined transport object
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            return console.log(error);
+        }
+        console.log('Message sent to: %s', mailOptions.to);
+    });
+}//end sendNewMeetingMail
+
+
 module.exports = {
     sendWelcomeMail: sendWelcomeMail,
     sendNotification: sendNotification,
     sendNewMeetingMail: sendNewMeetingMail,
-    sendMeetingUpdateMail: sendMeetingUpdateMail
+    sendMeetingUpdateMail: sendMeetingUpdateMail,
+    sendForgotPasswordEmail: sendForgotPasswordEmail
 }
 
 

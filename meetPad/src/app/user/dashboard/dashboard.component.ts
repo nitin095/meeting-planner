@@ -18,21 +18,28 @@ import { Options } from 'fullcalendar';
 export class DashboardComponent implements OnInit {
 
   public userDetails = this.appService.getUserInfoFromLocalstorage();
+  public userId = this.userDetails.userId;
   public allMeetings: any = [];
 
   calendarOptions: Options;
   @ViewChild(CalendarComponent) ucCalendar: CalendarComponent;
 
-  constructor(private router: Router, private appService: AppService) { }
+  constructor(private _route: ActivatedRoute, private router: Router, private appService: AppService) { }
 
   ngOnInit() {
+    this._route.queryParams.subscribe(params => {
+      if (params['uid']) {
+        this.userId = params['uid'];
+        this.getUser(params['uid'])
+      }
+    });
     this.loadCalender()
   }
 
   loadCalender(): any {
 
     let getMeetings = new Promise((resolve, reject) => {
-      this.appService.getAllMeetings(this.userDetails.userId).subscribe(
+      this.appService.getAllMeetings(this.userId).subscribe(
         response => {
           if (response.status === 200) {
             this.allMeetings = response.data;
@@ -82,14 +89,27 @@ export class DashboardComponent implements OnInit {
 
   eventClick = (meeting) => {
     console.log(meeting.event);
-    this.router.navigate(['meeting',meeting.event.meetingId]);
+    this.router.navigate(['meeting', meeting.event.meetingId]);
   }
 
   dayClick = (event) => {
-    if(event.view.name != 'month')
-    return;
-    this.ucCalendar.fullCalendar('changeView','agendaDay')
+    if (event.view.name != 'month')
+      return;
+    this.ucCalendar.fullCalendar('changeView', 'agendaDay')
     this.ucCalendar.fullCalendar('gotoDate', event.date);
+  }
+
+  getUser = (uid) => {
+    console.log('getUser called with uid: '+uid)
+    this.appService.getUser(uid).subscribe(
+      response => {
+        console.log(response)
+        this.userDetails = response.data
+      },
+      error => {
+        console.log(`ERROE! ${error.errorMessage}`)
+      }
+    )
   }
 
   public logout: any = () => {

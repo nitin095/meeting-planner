@@ -18,6 +18,10 @@ module.exports.setRouter = (app) => {
 
     app.put(`${baseUrl}/:userId/edit`, auth.isAuthorized, userController.editUser);
 
+    app.put(`${baseUrl}/forgotPassword`, userController.forgotPassword);
+
+    app.put(`${baseUrl}/resetPassword`, userController.resetPassword);
+
     app.post(`${baseUrl}/:userId/delete`, auth.isAuthorized, userController.deleteUser);
     
     app.post(`${baseUrl}/logout`, auth.isAuthorized, userController.logout);

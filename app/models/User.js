@@ -40,6 +40,14 @@ let userSchema = new Schema({
   createdOn: {
     type: Date,
     default: ""
+  },
+  resetPasswordToken: {
+    type: String,
+    default: undefined
+  },
+  resetPasswordExpires: {
+    type: Date,
+    default: undefined
   }
 
 })
