@@ -1,0 +1,102 @@
+.h-sm{
+    letter-spacing: 0.5px;
+    /* color: black; */
+    font-weight: 400
+}
+.heading-row{
+    background: #572b5e
+}
+h3{
+    letter-spacing: 1px;
+    font-weight: lighter;
+    color: white;
+}
+.admin-col{
+    -webkit-box-shadow: 4px 0px 32px -5px rgba(0,0,0,0.75);
+    -moz-box-shadow: 4px 0px 32px -5px rgba(0,0,0,0.75);
+    box-shadow: 2px 0px 32px -5px rgba(0,0,0,0.55);
+}
+.admin-header{
+   
+}
+.admin-header .display-4{
+    color: #e46744;
+    letter-spacing: 1px;
+}
+.meeting-heading{
+    font-weight: bold;
+    color: #e46744
+}
+.search-input{
+    border-bottom: 2px solid #e46744
+}
+.search-input small{
+    color: #e46744;
+    font-weight: 500
+}
+.search-input input{
+    border: none;
+    font-size: small;
+
+}
+.search-input input:focus{
+    outline: none;
+}
+.meeting-card{
+    cursor: default;
+    transition: all 0.3s ease
+}
+.meeting-card:hover{
+    border: 1px solid #e46744;
+    background-color: #fcf9f8
+}
+.meeting-card:active{
+    background-color: #e46744
+}
+.new-meeting-button-row{
+    position: absolute;
+    bottom: 10%;
+    width: 100%;
+}
+.create-meeting-button{
+    background: #e46744;
+    color: white;
+    font-size: 2.5rem;
+    font-weight: lighter;
+    cursor: pointer;
+    margin: auto;
+    line-height: 1rem;
+    padding-top: 0.7rem;
+    padding-bottom: 1.2rem;
+    padding-right: 0.8rem;
+    padding-left: 0.8rem;
+    border-radius: 50%;
+    transition: all 0.3s ease
+}
+.create-meeting-button:hover{
+    -webkit-box-shadow: 0px 0px 0px 5px rgba(228,103,68,1);
+    -moz-box-shadow: 0px 0px 0px 5px rgba(228,103,68,1);
+    box-shadow: 0px 0px 0px 5px rgb(241, 209, 200);
+}
+.create-meeting-button:active{
+    outline: none;
+    -webkit-box-shadow: 0px 0px 0px 8px rgba(228,103,68,1);
+    -moz-box-shadow: 0px 0px 0px 8px rgba(228,103,68,1);
+    box-shadow: 0px 0px 0px 8px rgb(241, 209, 200);
+}
+.user{
+    padding: 1rem;
+    border-bottom: 1px solid lightgray;
+    transition: all 0.15s ease;
+}
+.user > .lead {
+    font-weight: bold;
+    color: #ab3a61;
+}
+.user:hover{
+    background: #ab3a61;
+    color: white
+}
+.user:hover .lead{
+    color: white
+}

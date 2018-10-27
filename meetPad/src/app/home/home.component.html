@@ -1,11 +1,35 @@
-<div class="jumbotron jumbotron-fluid">
-  <div class="container">
-    <h1 class="display-4">Meet Pad</h1>
-    <p class="lead">Get track of all your meetings and get notified.</p>
+<div class="container-fluid gradient-bg">
+  <div class="row justify-content-end fixed-top">
+    <span class="mr-5 mt-3 admin-button" [routerLink]='["/admin/login"]'>Admin</span>
+  </div>
+  <div class="row align-items-center justify-content-center" style="height:100vh">
+    <div class="col-auto display-box">
+      <div class="row text-center">
+          <span class="col-12 display-3">Meet Pad</span>
+          <span class="col-12">Get track of all your meetings and get notified.</span>
+      </div>
+      <div class="row justify-content-center text-center mt-2">
+          <form #createLoginForm="ngForm" (ngSubmit)="login()">
+            <div class="form-group">
+              <label for="exampleInputEmail1">Email address</label>
+              <input type="email" name="email" class="form-control" [(ngModel)]="email" placeholder="Enter email" >
+            </div>
+            <div class="form-group">
+              <label for="exampleInputPassword1">Password</label>
+              <input type="password" name="password" class="form-control" [(ngModel)]="password" placeholder="Password">
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+            <small class="ml-3 d-none">Forgot password</small>
+          </form>
+        </div>
+    </div>
+  </div>
+  <div class="row justify-content-center signup">
+    <span>Don't have an account? Signup</span>
   </div>
 </div>
 
-<div class="container mb-5">
+<!-- <div class="container mb-5">
   <div class="row">
     <form #createLoginForm="ngForm" (ngSubmit)="login()">
       <div class="form-group">
@@ -20,4 +44,4 @@
       <span class="ml-3">Forgot password</span>
     </form>
   </div>
-</div>
+</div> -->

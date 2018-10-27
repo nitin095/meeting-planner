@@ -1,0 +1,36 @@
+.display-4{
+    color: #e46744
+}
+.create-meeting-col{
+    -webkit-box-shadow: 4px 0px 32px -5px rgba(0,0,0,0.75);
+    -moz-box-shadow: 4px 0px 32px -5px rgba(0,0,0,0.75);
+    box-shadow: 2px 0px 32px -5px rgba(0,0,0,0.55);
+}
+input{
+    border: none;
+    background-color: whitesmoke
+}
+.heading-row{
+    background: #572b5e
+}
+h3{
+    letter-spacing: 1px;
+    font-weight: lighter;
+    color: white;
+}
+.user{
+    padding: 1rem;
+    border-bottom: 1px solid lightgray;
+    transition: all 0.15s ease;
+}
+.user > .lead {
+    font-weight: bold;
+    color: #ab3a61;
+}
+.user:hover{
+    background: #ab3a61;
+    color: white
+}
+.user:hover .lead{
+    color: white
+}

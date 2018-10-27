@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { FormsModule }   from '@angular/forms';
 import { HttpClientModule } from "@angular/common/http";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 import { AdminModule } from './admin/admin.module';
 import { UserModule } from './user/user.module';
@@ -25,6 +26,7 @@ import { AppService } from "./app.service";
     HttpClientModule,
     FormsModule,
     BrowserAnimationsModule,
+    FontAwesomeModule,
     AdminModule,
     UserModule,
     RouterModule.forRoot([

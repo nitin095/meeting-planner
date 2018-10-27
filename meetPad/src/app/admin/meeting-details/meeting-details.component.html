@@ -1,106 +1,122 @@
-<div class="container my-5">
+<div class="container-fluid">
   <div class="row">
-    <div class="col display-4">Create new meeting</div>
-  </div>
-</div>
-
-<div class="container my-5">
-  <div class="row">
-    <div class="col">
-      <form>
-        <div class="form-group row">
-          <label for="creator" class="col-sm-2 col-form-label">By</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control-plaintext" id="creator" placeholder="Admin" readonly>
-          </div>
-        </div>
-        <div class="form-group row">
-          <label for="inputTitle" class="col-sm-2 col-form-label">Title</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control" id="inputTitle"  [(ngModel)]="title" placeholder="Title" [ngModelOptions]="{standalone: true}">
-          </div>
-        </div>
-        <fieldset class="form-group">
-          <div class="row">
-            <legend class="col-form-label col-sm-2 pt-0">Time</legend>
-            <div class="col-sm-10">
-              <div class="form-row">
-                <div class="col">
-                  <input type="text" class="form-control"  [(ngModel)]="start" placeholder="Start" [ngModelOptions]="{standalone: true}">
+    <div class="col-8 px-5 create-meeting-col">
+      <div class="row">
+          <back-btn class="country-back-btn"></back-btn>
+        <div class="col-10 display-4">Create new meeting</div>
+      </div>
+      <div class="row">
+        <div class="col-6">
+          <form>
+            <div class="form-group row">
+              <label for="creator" class="col-sm-auto col-form-label">By</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control-plaintext" id="creator" placeholder="Admin" readonly>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="inputTitle" class="col-sm-auto col-form-label">Title</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="inputTitle" [(ngModel)]="title" placeholder="Title"
+                  [ngModelOptions]="{standalone: true}">
+              </div>
+            </div>
+            <fieldset class="form-group">
+              <div class="row">
+                <legend class="col-form-label col-sm-auto">Time</legend>
+                <div class="col-sm-10">
+                  <div class="form-row">
+                    <div class="col">
+                      <input type="text" class="form-control" [(ngModel)]="start" placeholder="Start" [ngModelOptions]="{standalone: true}">
+                    </div>
+                    <div class="col">
+                      <input type="text" class="form-control" [(ngModel)]="end" placeholder="End" [ngModelOptions]="{standalone: true}">
+                    </div>
+                  </div>
                 </div>
-                <div class="col">
-                  <input type="text" class="form-control"  [(ngModel)]="end" placeholder="End" [ngModelOptions]="{standalone: true}">
+              </div>
+            </fieldset>
+            <div class="form-group row">
+              <label for="inputLocation" class="col-sm-auto col-form-label">Location</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="inputLocation" [(ngModel)]="location" placeholder="Location"
+                  [ngModelOptions]="{standalone: true}">
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="inputLocation" class="col-sm-auto col-form-label">Alerts</label>
+              <div class="col-sm-5">
+                <label class="sr-only" for="inlineFormInputGroup">Email</label>
+                <div class="input-group mb-2">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">@</div>
+                  </div>
+                  <input type="text" class="form-control" id="inlineFormInputGroup" [(ngModel)]="emailAlerts"
+                    placeholder="Email" [ngModelOptions]="{standalone: true}">
+                </div>
+              </div>
+              <div class="col-sm-5">
+                <label class="sr-only" for="inlineFormInputGroup">Notification</label>
+                <div class="input-group mb-2">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">@</div>
+                  </div>
+                  <input type="text" class="form-control" id="inlineFormInputGroup" [(ngModel)]="notificationAlerts"
+                    placeholder="Notification" [ngModelOptions]="{standalone: true}">
                 </div>
               </div>
             </div>
-          </div>
-        </fieldset>
-        <div class="form-group row">
-          <label for="inputLocation" class="col-sm-2 col-form-label">Location</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control" id="inputLocation"  [(ngModel)]="location" placeholder="Location" [ngModelOptions]="{standalone: true}">
-          </div>
-        </div>
-        <div class="form-group row">
-          <label for="inputLocation" class="col-sm-2 col-form-label">Alerts</label>
-          <div class="col-sm-5">
-            <label class="sr-only" for="inlineFormInputGroup">Email</label>
-            <div class="input-group mb-2">
-              <div class="input-group-prepend">
-                <div class="input-group-text">@</div>
+            <div class="form-group row">
+              <label for="inputNotes" class="col-sm-auto col-form-label">Notes</label>
+              <div class="col-sm-10">
+                <textarea class="form-control" id="inputNotes" rows="3" [(ngModel)]="notes" [ngModelOptions]="{standalone: true}"></textarea>
               </div>
-              <input type="text" class="form-control" id="inlineFormInputGroup"  [(ngModel)]="emailAlerts" placeholder="Email" [ngModelOptions]="{standalone: true}">
             </div>
-          </div>
-          <div class="col-sm-5">
-            <label class="sr-only" for="inlineFormInputGroup">Notification</label>
-            <div class="input-group mb-2">
-              <div class="input-group-prepend">
-                <div class="input-group-text">@</div>
+            <div class="form-group row">
+              <label for="inputNotes" class="col-sm-auto col-form-label">Invitee</label>
+              <div class="col-sm-10">
+                <span *ngFor="let invitee of invitees" (click)="removeInvitee(invitee)">
+                  {{invitee.firstName}} {{invitee.lastName}}&nbsp;
+                </span>
+                <span>Add</span>
               </div>
-              <input type="text" class="form-control" id="inlineFormInputGroup"  [(ngModel)]="notificationAlerts" placeholder="Notification" [ngModelOptions]="{standalone: true}">
             </div>
-          </div>
+            <div class="form-group row">
+              <label for="inputTinezone" class="col-sm-auto col-form-label">Timezone</label>
+              <div class="col-sm-10">
+                <input type="text" class="form-control" id="inputTinezone" placeholder="Timezone">
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-sm-10">
+                <button type="submit" class="btn btn-primary" (click)="createMeeting()">Create meeting</button>
+              </div>
+            </div>
+          </form>
         </div>
-        <div class="form-group row">
-          <label for="inputNotes" class="col-sm-2 col-form-label">Notes</label>
-          <div class="col-sm-10">
-            <textarea class="form-control" id="inputNotes" rows="3"  [(ngModel)]="notes" [ngModelOptions]="{standalone: true}"></textarea>
-          </div>
-        </div>
-        <div class="form-group row">
-          <label for="inputNotes" class="col-sm-2 col-form-label">Invitee</label>
-          <div class="col-sm-10">
-            <span *ngFor="let invitee of invitees" (click)="removeInvitee(invitee)">
-              {{invitee.firstName}} {{invitee.lastName}}&nbsp; 
-            </span> 
-              <span>Add</span>
-          </div>
-        </div>
-        <div class="form-group row">
-          <label for="inputTinezone" class="col-sm-2 col-form-label">Timezone</label>
-          <div class="col-sm-10">
-            <input type="text" class="form-control" id="inputTinezone" placeholder="Timezone">
-          </div>
-        </div>
-        <div class="form-group row">
-          <div class="col-sm-10">
-            <button type="submit" class="btn btn-primary" (click)="createMeeting()">Create meeting</button>
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-
-
-<div class="container">
-  <div class="row">
-    <div class="col-4" *ngFor="let user of allUsers">
-      <div class="card m-2 p-3" (click)="addInvitee(user)">
-        {{user.firstName}} {{user.lastName}}
-        <small>{{user.email}}</small>
       </div>
     </div>
+    <!-- end col-8 -->
+    <div class="col-4" *ngIf="allUsers">
+      <div class="row heading-row">
+        <div class="col">
+          <h3 class="text-uppercase pt-3 pb-2">Select invitees</h3>
+        </div>
+      </div>
+      <div class="row justify-content-center">
+        <div class="col">
+          <div class="row justify-content-between align-items-center user" *ngFor="let user of allUsers" [routerLink]="['/dashboard']"
+            [queryParams]="{uid: user.userId}">
+            <span class="col-12 lead">{{user.firstName}} {{user.lastName}}</span>
+            <small class="col-12">{{user.email}}</small>
+            <small class="col-9">{{user.mobileNumber}}</small>
+            <span class="badge badge-primary badge-pill">{{user.mobileNumber}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- end col-4 -->
   </div>
+  <!-- end row -->
 </div>
+<!-- end container-fluid -->

@@ -1,0 +1,60 @@
+.gradient-bg{
+    background-image: linear-gradient(to right top, #051937, #572b5e, #ab3a61, #e46744, #ebb012);
+}
+.display-box{
+    background: white;
+    border-radius: 5px;
+    padding-bottom: 1rem;
+    letter-spacing: 1px;
+    -webkit-box-shadow: 0px 0px 150px 1px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 150px 1px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 150px 1px rgba(0,0,0,0.75);
+}
+.display-3{
+   color: #572b5e
+}
+.form-group{
+    line-height: 0.5rem;
+    text-align: center;
+
+}
+label{
+    font-size: small
+}
+input{
+    border: 2px solid #e46744;
+    border-radius: 20px
+}
+button{
+    background: white;
+    color: #e46744;
+    border: 2px solid #e46744;
+    border-radius: 20px;
+    padding: 0.2rem 1rem;
+    /* padding-top: 0.5rem; */
+    /* padding-bottom: 0.4rem; */
+    text-transform: uppercase;
+    font-size: small;
+    letter-spacing: 2px;
+    transition: all 0.2s ease;
+}
+button:hover{
+    background: #e46744;
+    border-color: #e46744;
+}
+.signup{
+    color: white;
+    transform: translateY(-5rem)    
+}
+.admin-button{
+    border: 1px solid #051937;
+    color: #051937;
+    padding: 0.1rem 0.5rem;
+    border-radius: 20px;
+    font-size: small
+}
+.admin-button:hover{
+    border-color: white;
+    color: white;
+    cursor: pointer;
+}

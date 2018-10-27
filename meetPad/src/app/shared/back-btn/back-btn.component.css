@@ -1,0 +1,28 @@
+.back-btn{
+    background: none;
+    color: #00bf72;
+    cursor: pointer;
+    border: 2px solid #00bf72;
+    border-radius: 50%;
+    padding: 0.1rem 0.55rem;
+    padding-top: 0.1rem;
+    padding-bottom: 0.18rem;
+    transition: all 0.5s ease
+}
+.back-btn:hover{
+    background: #00bf72;
+    color: white;
+    border-color: transparent;
+    transform: scale(1.1)
+}
+.text{
+    visibility: hidden;
+    font-weight: bold;
+    font-size: small;
+    color: #00bf72;
+    letter-spacing: 1px;
+    transition: all 5 ease
+}
+.back-btn:hover + .text{
+    visibility: visible;
+}

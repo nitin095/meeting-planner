@@ -1,6 +1,3 @@
-/**
- * modules dependencies.
- */
 const socketio = require('socket.io');
 const mongoose = require('mongoose');
 const shortid = require('shortid');
@@ -19,7 +16,7 @@ const redisLib = require("./redisLib.js");
 
 let setServer = (server) => {
 
-    //let allOnlineUsers = []
+    let allOnlineUsers = []
 
     let io = socketio.listen(server);
 
