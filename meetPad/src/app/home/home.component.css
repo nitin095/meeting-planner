@@ -1,11 +1,23 @@
-.gradient-bg{
+.user-bg{
     background-image: linear-gradient(to right top, #051937, #572b5e, #ab3a61, #e46744, #ebb012);
+}
+.admin-bg{
+    background-image: linear-gradient(to right top, #2496c7, #5688d3, #9272ca, #c354a7, #dc3770);
+}
+.admin-badge{
+    position: absolute;
+    top: 20%;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #2496c7;
+    letter-spacing: 1px;
 }
 .display-box{
     background: white;
     border-radius: 5px;
     padding-bottom: 1rem;
-    letter-spacing: 1px;
+    letter-spacing: 1px;;
     -webkit-box-shadow: 0px 0px 150px 1px rgba(0,0,0,0.75);
     -moz-box-shadow: 0px 0px 150px 1px rgba(0,0,0,0.75);
     box-shadow: 0px 0px 150px 1px rgba(0,0,0,0.75);
@@ -16,14 +28,16 @@
 .form-group{
     line-height: 0.5rem;
     text-align: center;
-
 }
 label{
     font-size: small
 }
-input{
+input.login{
     border: 2px solid #e46744;
     border-radius: 20px
+}
+mat-form-field{
+    
 }
 button{
     background: white;
@@ -57,4 +71,8 @@ button:hover{
     border-color: white;
     color: white;
     cursor: pointer;
+}
+.sign-up-link:hover{
+    cursor: pointer;
+    text-decoration: underline;  
 }

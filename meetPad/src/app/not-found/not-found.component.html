@@ -1,3 +1,8 @@
-<p>
-  not-found works!
-</p>
+<div class="container text-center my-5">
+    <h1 class="my-5 display-1">404</h1>
+    <p class="lead my-5">Couldn’t find that page. It either moved or doesn’t exist anymore.</p>
+    <div class="row justify-content-center">
+      <div class="col-2 button m-2" (click)="goBack()">Previous page</div>
+      <div class="col-2 button m-2" [routerLink]="['/home']">Home</div>
+    </div>
+  </div>

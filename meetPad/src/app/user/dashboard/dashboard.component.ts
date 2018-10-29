@@ -73,13 +73,13 @@ export class DashboardComponent implements OnInit {
             events.push({
               title: meeting.title,
               start: meeting.time.start,
-              meetingId: meeting.meetingId
+              meetingId: meeting.meetingId,
+              color: meeting.meetingColor
             });
           }
           callback(events);
         },//end events
-        eventColor: 'darkmagenta',
-        eventBackgroundColor: 'purple',
+        timezone: 'local',
         eventTextColor: 'white',
         timeFormat: 'h(:mm)t',
         height: 'parent'

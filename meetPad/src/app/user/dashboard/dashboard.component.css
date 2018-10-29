@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css?family=Work+Sans:400');
 .detail-col{
     background-image: linear-gradient(to right, #4e2156, #633670, #784b8b, #8d62a8, #a279c5);
 }
@@ -10,4 +11,8 @@
     -webkit-box-shadow: -6px 0px 39px -5px rgba(0,0,0,0.75);
 -moz-box-shadow: -6px 0px 39px -5px rgba(0,0,0,0.75);
 box-shadow: -6px 0px 39px -5px rgba(0,0,0,0.75);
+}
+.fc{
+    /* color: red!important; */
+    font-family: 'Work Sans', sans-serif;
 }

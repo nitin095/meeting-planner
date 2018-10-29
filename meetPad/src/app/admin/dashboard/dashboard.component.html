@@ -1,117 +1,67 @@
-<div class="container-fluid"> 
+<div class="container-fluid">
   <div class="row">
     <div class="col-8 admin-col">
-        <div class="row justify-content-between admin-header p-4">
-            <div class="col-12 p-2">
-                <button type="button" class="btn btn-outline-danger" (click)="logout()">Logout</button>
-              </div>  
-          <div class="col-auto display-4">
-              {{adminDetails.firstName}} {{adminDetails.lastName}}
-            </div>
-          </div>
-          <div class="row px-4 justify-content-between">
-              <div class="col-auto lead h-sm" *ngIf="allMeetings">
-                {{allMeetings.length}} meetings this week.
-              </div>
-              <div class="col-auto lead h-sm" *ngIf="!allMeetings">
-                You have no meetings.
-              </div>
-              <div class="col-auto search-input p-0" [ngClass]="{active: searchInput}">
-                  <small class="text-uppercase pr-2">Search</small>
-                  <input type="text" [(ngModel)]="searchInput" placeholder="Search meeting">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-4" *ngFor="let meeting of allMeetings | search: searchInput">
-                  <div class="card m-2 p-3 meeting-card">
-                    <div class="lead meeting-heading">
-                      {{meeting.title}}
-                    </div>
-                    <small>{{meeting.time.start | date:'d LLL yyy h:m a'}} - {{meeting.time.end | date:'h:m a'}}</small>
-                    <small>{{meeting.location}}</small>
-                    
-                  </div>
-                </div>
-              </div>
-              <div class="row justify-content-end align-items-center new-meeting-button-row">
-                <div class="col-auto">
-                    <div class="create-meeting-button" [routerLink]="['/admin/meeting/create']">+</div>
-                  </div>
-                </div>
-    </div>
-    <!-- end col-8 -->
-    <div class="col-4" *ngIf="allUsers">
-        <div class="row heading-row">
-            <div class="col">
-              <h3 class="text-uppercase pt-3 pb-2">Users</h3>
-            </div>
-          </div>
-          
-  <div class="row justify-content-center">
-      <div class="col">
-        <div class="row justify-content-between align-items-center user" *ngFor="let user of allUsers" [routerLink]="['/dashboard']" [queryParams]="{uid: user.userId}">
-          <span class="col-12 lead">{{user.firstName}} {{user.lastName}}</span>
-          <small class="col-12">{{user.email}}</small>
-          <small class="col-9">{{user.mobileNumber}}</small>
-          <span class="badge badge-primary badge-pill">{{user.mobileNumber}}</span>
+      <div class="row justify-content-between align-items-center admin-header p-4">
+        <div class="col-auto display-4">
+          {{adminDetails.firstName}} {{adminDetails.lastName}}
         </div>
       </div>
+      <div class="row px-4 justify-content-between">
+        <div class="col-auto lead h-sm" *ngIf="allMeetings">
+          {{allMeetings.length}} upcoming meetings.
+        </div>
+        <div class="col-auto lead h-sm" *ngIf="!allMeetings">
+          You have no meetings.
+        </div>
+        <div class="col-auto search-input p-0">
+          <small class="text-uppercase pr-2">Search</small>
+          <input type="text" [(ngModel)]="searchInput" placeholder="title, date or location">
+        </div>
+      </div>
+      <hr>
+      <div class="row">
+        <div class="col-4" *ngFor="let meeting of allMeetings | search: searchInput">
+          <div class="card m-2 p-3 meeting-card" matRipple>
+            <div class="lead meeting-heading">
+              {{meeting.title}}
+            </div>
+            <small>{{meeting.time.start | date:'d LLL yyy h:m a'}} - {{meeting.time.end | date:'h:m a'}}</small>
+            <small>{{meeting.location}}</small>
+
+          </div>
+        </div>
+      </div>
+      <!-- <div class="row justify-content-end align-items-center">
+        <div class="col-auto"> -->
+          <button class="create-meeting-button" matTooltip="Create new meeting" [routerLink]="['/admin/meeting/create']">+</button>
+        <!-- </div>
+      </div> -->
     </div>
+    <!-- end col-8 -->
+    <div class="col-4 users-col" *ngIf="allUsers">
+      <div class="row heading-row sticky-top align-items-center">
+        <div class="col">
+          <h3 class="text-uppercase pt-3 pb-2">Users</h3>
+        </div>
+        <div class="col-auto users-search-input p-0" [ngClass]="{active: searchInput}">
+          <small class="text-uppercase pr-2">Search</small>
+          <input type="text" [(ngModel)]="usersSearchInput" placeholder="name, email oe mobile">
+        </div>
+      </div>
+
+      <div class="row justify-content-center">
+        <div class="col">
+          <div class="row justify-content-between align-items-center user" matRipple *ngFor="let user of allUsers | search : usersSearchInput :'users'"
+            [routerLink]="['/dashboard']" [queryParams]="{uid: user.userId}">
+            <span class="col-12 lead">{{user.firstName}} {{user.lastName}}</span>
+            <small class="col-12">{{user.email}}</small>
+            <small class="col-9">{{user.mobileNumber}}</small>
+          </div>
+        </div>
+      </div>
 
     </div>
   </div>
   <!-- end main row -->
 </div>
 <!-- end container -->
-
-<!-- <div class="container">
-  <div class="row justify-content-between">
-    <div class="col-auto display-1">
-      Hi! {{adminDetails.firstName}} {{adminDetails.lastName}}
-    </div>
-    <div class="col-2 p-2">
-      <button type="button" class="btn btn-outline-danger" (click)="logout()">Logout</button>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col display-4" *ngIf="allMeetings">
-      You have {{allMeetings.length}} meetings.
-    </div>
-    <div class="col display-4" *ngIf="!allMeetings">
-      You have no meetings.
-    </div>
-  </div>
-</div> -->
-
-<!-- <div class="container">
-  <div class="row">
-    <div class="col-4" *ngFor="let meeting of allMeetings">
-      <div class="card m-2 p-3">
-        <div class="lead">
-          {{meeting.title}}
-        </div>
-        <small>{{meeting.time.start | date:'d LLL yyy h:m a'}}</small>
-      </div>
-    </div>
-  </div>
-</div> -->
-
-<!-- <div class="container my-5" *ngIf="allUsers">
-  <div class="row">
-    <div class="col">
-      <h2>Users</h2>
-    </div>
-  </div>
-
-  <div class="row justify-content-center">
-    <div class="col-4">
-      <div class="row justify-content-between align-items-center user" *ngFor="let user of allUsers" [routerLink]="['/dashboard']" [queryParams]="{uid: user.userId}">
-        <span class="col-12 lead">{{user.firstName}} {{user.lastName}}</span>
-        <small class="col-12">{{user.email}}</small>
-        <small class="col-9">{{user.mobileNumber}}</small>
-        <span class="badge badge-primary badge-pill">{{user.mobileNumber}}</span>
-      </div>
-    </div>
-  </div>
-
-</div> -->

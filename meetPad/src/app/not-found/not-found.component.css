@@ -1,0 +1,17 @@
+h1{
+    word-spacing: 15px
+}
+.button{
+    padding: 1rem 2rem;
+    color: #e46744;
+    background-color: none;
+    border: 2px solid #e46744;
+    cursor: pointer;
+    border-radius: 30px;
+    text-transform: uppercase;
+    transition: all 0.3s ease-in-out
+}
+.button:hover{
+    color: white;
+    background-color: #e46744
+}

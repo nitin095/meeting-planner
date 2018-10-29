@@ -9,22 +9,15 @@ export class SearchPipe implements PipeTransform {
     if (!items) return [];
     if (!searchText) return items;
     searchText = searchText.toLowerCase();
-    if (type == 'language') {
+    if (type == 'users') {
       return items.filter(it => {
-        for (let language of it.languages)
-          if (language.name.toLowerCase().includes(searchText))
-            return true
-      });
-    } else if (type == 'currency') {
-      return items.filter(it => {
-        for (let currency of it.currencies) {
-          if (currency.name && currency.name.toLowerCase().includes(searchText))
-            return true
-        }
+        return it.firstName.toLowerCase().includes(searchText) || it.lastName.toLowerCase().includes(searchText);
       });
     } else {
       return items.filter(it => {
-        return it.title.toLowerCase().includes(searchText);
+        return it.title.toLowerCase().includes(searchText) ||
+          it.location.toLowerCase().includes(searchText) ||
+          new Date(it.time.start).toDateString().includes(searchText)
       });
     }
   }

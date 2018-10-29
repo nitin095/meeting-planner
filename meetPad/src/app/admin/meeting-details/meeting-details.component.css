@@ -1,14 +1,15 @@
 .display-4{
-    color: #e46744
+    color: #572b5e
 }
 .create-meeting-col{
+    height: 90vh;
+    overflow-y: scroll;
     -webkit-box-shadow: 4px 0px 32px -5px rgba(0,0,0,0.75);
     -moz-box-shadow: 4px 0px 32px -5px rgba(0,0,0,0.75);
     box-shadow: 2px 0px 32px -5px rgba(0,0,0,0.55);
 }
-input{
-    border: none;
-    background-color: whitesmoke
+button:focus{
+    outline: none
 }
 .heading-row{
     background: #572b5e
@@ -23,14 +24,43 @@ h3{
     border-bottom: 1px solid lightgray;
     transition: all 0.15s ease;
 }
-.user > .lead {
-    font-weight: bold;
+.user  .lead {
+    font-weight: 600;
     color: #ab3a61;
 }
 .user:hover{
+    background: rgba(171, 58, 97, 0.3);
+    /* color: white */
+}
+.user.selected{
     background: #ab3a61;
     color: white
 }
-.user:hover .lead{
+.user.selected .lead{
     color: white
+}
+.create-meeting-btn{
+    background: none;
+    border-radius: 20px;
+    border: 1.5px solid #572b5e;
+    padding: 0.1rem 0.5rem;
+    padding-bottom: 0.2rem;
+    letter-spacing: 1px;
+    transition: all 0.3s ease   
+}
+.create-meeting-btn:hover{
+    background: #572b5e;
+    color: white
+}
+.invitees-col{
+    height: 90vh;
+    overflow-y: scroll
+}
+.add-alert-btn{
+    font-weight: 500;
+    color: grey;
+    cursor: pointer;
+}
+.add-alert-btn:hover{
+    color: #572b5e
 }

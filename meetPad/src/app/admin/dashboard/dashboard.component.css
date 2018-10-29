@@ -1,10 +1,18 @@
+.container-fluid{
+    height: 90vh;
+}
+.container-fluid > .row{
+    height: 100%;
+}
 .h-sm{
     letter-spacing: 0.5px;
     /* color: black; */
     font-weight: 400
 }
 .heading-row{
-    background: #572b5e
+    background-image: linear-gradient(to left, #e46744, #ca3d50, #a5195a, #75055f, #3b0a5b);
+    /* background: rgba(87, 43, 94, 0.95) */
+    z-index: 1;
 }
 h3{
     letter-spacing: 1px;
@@ -12,6 +20,7 @@ h3{
     color: white;
 }
 .admin-col{
+    overflow-y: scroll;
     -webkit-box-shadow: 4px 0px 32px -5px rgba(0,0,0,0.75);
     -moz-box-shadow: 4px 0px 32px -5px rgba(0,0,0,0.75);
     box-shadow: 2px 0px 32px -5px rgba(0,0,0,0.55);
@@ -28,7 +37,7 @@ h3{
     color: #e46744
 }
 .search-input{
-    border-bottom: 2px solid #e46744
+    border-bottom: 2px solid #e46744;
 }
 .search-input small{
     color: #e46744;
@@ -36,10 +45,30 @@ h3{
 }
 .search-input input{
     border: none;
-    font-size: small;
-
+    font-size: small
 }
 .search-input input:focus{
+    outline: none;
+    width: 30vw
+}
+
+.users-search-input{
+    border-bottom: 1px solid white
+}
+.users-search-input small{
+    color: white;
+    font-weight: 400
+}
+.users-search-input input{
+    background: none;
+    color: white;
+    border: none;
+    font-size: small;
+}
+.users-search-input input::placeholder{
+    color: rgb(184, 183, 183)
+}
+.users-search-input input:focus{
     outline: none;
 }
 .meeting-card{
@@ -50,21 +79,17 @@ h3{
     border: 1px solid #e46744;
     background-color: #fcf9f8
 }
-.meeting-card:active{
-    background-color: #e46744
-}
-.new-meeting-button-row{
-    position: absolute;
-    bottom: 10%;
-    width: 100%;
-}
 .create-meeting-button{
+    position: sticky;
+    bottom: 10px;
+    float: right;
     background: #e46744;
     color: white;
     font-size: 2.5rem;
     font-weight: lighter;
     cursor: pointer;
     margin: auto;
+    border: none;
     line-height: 1rem;
     padding-top: 0.7rem;
     padding-bottom: 1.2rem;
@@ -84,14 +109,22 @@ h3{
     -moz-box-shadow: 0px 0px 0px 8px rgba(228,103,68,1);
     box-shadow: 0px 0px 0px 8px rgb(241, 209, 200);
 }
+.users-col{
+    height: 90vh;
+    overflow-y: scroll
+}
 .user{
     padding: 1rem;
     border-bottom: 1px solid lightgray;
     transition: all 0.15s ease;
 }
 .user > .lead {
-    font-weight: bold;
+    font-weight: 600;
     color: #ab3a61;
+}
+.user mat-icon{
+    font-size: 0.8rem;
+    color: grey;
 }
 .user:hover{
     background: #ab3a61;

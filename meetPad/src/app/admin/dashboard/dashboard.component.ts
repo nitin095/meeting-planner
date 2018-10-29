@@ -3,6 +3,7 @@ import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from "@angular/router";
 import { AppService } from './../../app.service';
 import { Cookie } from 'ng2-cookies/ng2-cookies';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-dashboard',
@@ -12,7 +13,7 @@ import { Cookie } from 'ng2-cookies/ng2-cookies';
 })
 export class DashboardComponent implements OnInit {
 
-  constructor(private router: Router, private appService: AppService) { }
+  constructor(private router: Router, private appService: AppService, public snackBar: MatSnackBar) { }
 
   public adminDetails = this.appService.getUserInfoFromLocalstorage();
   public allMeetings: any;
@@ -36,6 +37,7 @@ export class DashboardComponent implements OnInit {
         }
       },
       error => {
+        this.snackBar.open('Some error occured', 'Close', { verticalPosition: 'top', horizontalPosition: 'end', duration: 4000, });
         console.log("some error occured");
         console.log(error)
       }
@@ -55,12 +57,14 @@ export class DashboardComponent implements OnInit {
         } else {
           console.log("Couldn't get users")
           console.log(response.message)
-          if(response.message == 'Failed To Authorized'){
+          if (response.message == 'Failed To Authorized') {
+            this.snackBar.open('Authorization error!', 'Close', { verticalPosition: 'top', horizontalPosition: 'end', duration: 4000, });
             this.router.navigate(['/']);
           }
         }
       },
       error => {
+        this.snackBar.open('Some error occured', 'Close', { verticalPosition: 'top', horizontalPosition: 'end', duration: 4000, });
         console.log("some error occured");
         console.log(error)
       }
@@ -68,23 +72,5 @@ export class DashboardComponent implements OnInit {
     )
 
   }//end getAllUsers function
-
-
-  public logout: any = () => {
-    this.appService.logout('admin').subscribe((apiResponse) => {
-        if (apiResponse.status === 200) {
-          console.log("logout called")
-          Cookie.delete('authtoken');
-          Cookie.delete('receiverId');
-          Cookie.delete('receiverName');
-          this.router.navigate(['/']);
-        } else {
-          console.log(apiResponse.message)
-        } // end condition
-
-      }, (err) => {
-        console.log('some error occured')
-      });
-  } // end logout
 
 }

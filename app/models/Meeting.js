@@ -43,6 +43,10 @@ let meetingSchema = new Schema({
         default: ''
     },
     invitees: [],
+    meetingColor: {
+        type: String,
+        default: 'purple'
+    },
     created: {
         type: Date,
         default: Date.now

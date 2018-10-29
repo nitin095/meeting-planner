@@ -1,3 +1,37 @@
+nav{
+    /* background-color:  #e46744; */
+    background: rgba(255,255,255,0.8)!important;
+    border-top: 5px solid #e46744;
+    -webkit-box-shadow: 0px 2px 12px -3px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 2px 12px -3px rgba(0,0,0,0.75);
+    box-shadow: 0px 2px 12px -3px rgba(0,0,0,0.75);
+    height: 10vh;
+    z-index: 2
+}
+nav .navbar-brand{
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 500
+}
+nav a{
+    color: #e46744
+}
+button:focus{
+outline: none
+}
 footer{
+    margin: 0;
     background-color: whitesmoke
+}
+
+.footer-link{
+    text-decoration: none;
+    color: #e46744
+}
+.footer-link:hover{
+    color: #572b5e
+}
+.footer-icon{
+    color: #e46744;
+    font-size: 1.8rem
 }

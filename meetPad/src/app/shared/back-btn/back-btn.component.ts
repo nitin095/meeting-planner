@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Location } from '@angular/common';
 import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
@@ -8,6 +8,9 @@ import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
   styleUrls: ['./back-btn.component.css']
 })
 export class BackBtnComponent implements OnInit {
+
+  @Input() color: string;
+  @Input() text: boolean;
 
   faArrowLeft = faArrowLeft;
 

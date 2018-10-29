@@ -1,61 +1,60 @@
 <!-- navbar -->
-<nav class="navbar sticky-top navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" [routerLink]="['/home']">Meet Pad</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-    aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-
-  <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item">
-        <a class="nav-link" [routerLink]="['/home']">Home
-          <span class="sr-only">(current)</span>
-        </a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" [routerLink]="['/signup']">Signup</a>
-      </li>
-      <li class="nav-item">
-          <a class="nav-link" [routerLink]="['/dashboard']">Dasboard</a>
+<nav class="navbar sticky-top navbar-expand-lg" [ngClass]="{'d-none': url == '/home'}">
+    <a class="navbar-brand" [routerLink]="['/home']">Meet Pad</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+      aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item">
+          <a class="nav-link" [routerLink]="['/dashboard']">
+            <button mat-button color="warn">Dashboard</button>
+            <span class="sr-only">(current)</span>
+          </a>
         </li>
-      <li class="nav-item">
-        <a class="nav-link" [routerLink]="['/admin/signup']">Admin signup</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" [routerLink]="['/admin/login']">Admin login</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" [routerLink]="['/admin/dashboard']">Admin Dasboard</a>
-      </li>
-    </ul>
-  </div>
-</nav>
-<!-- end navbar -->
-
+        <li class="nav-item my-auto">
+            <button mat-button color="warn" [matMenuTriggerFor]="menu">Profile</button>
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item>
+                    <mat-icon>person</mat-icon>
+                    <span>View profile</span>
+                </button>
+              <button mat-menu-item (click)="logout()">
+                  <mat-icon>exit_to_app</mat-icon>
+                  <span>Logout</span>
+              </button>
+            </mat-menu>
+          </li>
+      </ul>
+    </div>
+  </nav>
+  <!-- end navbar -->
+  
 
 <router-outlet></router-outlet>
 
 <!-- footer -->
-<footer class="mt-5">
+<footer [ngClass]="{'d-none': url !== '/home'}">
   <div class="container pt-5">
     <div class="row py-4">
       <div class="col-12 col-md mb-4 mb-md-0 text-center text-md-left">
         <div class="row">
-          <span class="col-12">Made using REST Countries API</span>
+          <span class="col-12">API Documentation</span>
           <div class="col-12">
             <a class="footer-link" href="https://restcountries.eu" target="blank">restcountries.eu</a>
           </div>
           <span class="col-12">Github repository</span>
           <div class="col-12">
-            <a class="footer-link" href="https://github.com/nitin095/Country-Details" target="blank">github.com/nitin095/Country-Details</a>
+            <a class="footer-link" href="https://github.com/nitin095/meeting-planner" target="blank">github.com/nitin095/meeting-planner</a>
           </div>
         </div>
       </div>
       <div class="col-12 col-md-3 mb-4 mb-md-0 text-center">
         <div class="row">
           <div class="col-12">
-            <!-- <fa-icon class="mr-2 footer-icon" [icon]="faEnvelope"></fa-icon> -->
+            <fa-icon class="mr-2 footer-icon" [icon]="faEnvelope"></fa-icon>
           </div>
           <span class="col-12 lead">nitinshokeen9@gmail.com</span>
         </div>
@@ -64,7 +63,7 @@
         <div class="row">
           <div class="col-12">
             <a href="https://github.com/nitin095" target="blank">
-              <!-- <fa-icon class="mr-2 footer-icon" [icon]="faGithubSquare"></fa-icon> -->
+              <fa-icon class="mr-2 footer-icon" [icon]="faGithubSquare"></fa-icon>
             </a>
           </div>
           <div class="col-12 lead">github.com/nitin095</div>

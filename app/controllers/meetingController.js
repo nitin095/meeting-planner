@@ -175,7 +175,8 @@ let createMeeting = (req, res) => {
                     title: req.body.title,
                     notes: req.body.notes,
                     time: { start: req.body.startTime, end: req.body.endTime },
-                    location: req.body.location
+                    location: req.body.location,
+                    meetingColor: req.body.meetingColor
                 }) // end new blog model
 
                 let alerts = [];

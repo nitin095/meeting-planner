@@ -1,42 +1,12 @@
-<!-- <div class="container">
-  <div class="row justify-content-between">
-    <div class="col-auto display-1">
-      Hi! {{userDetails.firstName}} {{userDetails.lastName}}
-    </div>
-    <div class="col-2 p-2">
-      <button type="button" class="btn btn-outline-danger" (click)="logout()">Logout</button>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col display-4" *ngIf="allMeetings">
-      You have {{allMeetings.length}} meetings.
-    </div>
-    <div class="col display-4" *ngIf="!allMeetings">
-      You have no meetings.
-    </div>
-  </div>
-</div> -->
-<!-- 
-<div class="container">
-  <div class="row">
-    <div class="col-4" *ngFor="let meeting of allMeetings">
-      <div class="card m-2 p-3">
-        <div class="lead">
-          {{meeting.title}}
-        </div>
-        <small>{{meeting.time.start | date:'d LLL yyy h:m a'}}</small>
-      </div>
-    </div>
-  </div>
-</div> -->
-
 <div class="container-fluid">
   <div class="row">
     <div class="col-3 detail-col">
       <div class="row name py-2">
-        <div class="col-12"> <button type="button" class="btn btn-outline-danger" (click)="logout()">Logout</button></div>
+        <div class="col-12">
+          <back-btn class="country-back-btn pr-2"></back-btn>
+        </div>
         <div class="col-12 display-4" style="line-height: 1em">{{userDetails.firstName}} {{userDetails.lastName}}</div>
-        <div class="col-12 lead">You have {{allMeetings.length}} meetings.</div>
+        <div class="col-12 lead">{{allMeetings.length}} upcoming meetings.</div>
       </div>
     </div>
     <div class="col-9 calender-col">
