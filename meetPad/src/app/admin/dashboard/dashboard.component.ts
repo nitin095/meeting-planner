@@ -4,24 +4,33 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { AppService } from './../../app.service';
 import { Cookie } from 'ng2-cookies/ng2-cookies';
 import { MatSnackBar } from '@angular/material';
+import { SocketService } from './../../socket.service';
+import { faCircle } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
-  providers: [Location]
+  providers: [Location, SocketService]
 })
 export class DashboardComponent implements OnInit {
 
-  constructor(private router: Router, private appService: AppService, public snackBar: MatSnackBar) { }
+  faCircle = faCircle
 
+  constructor(private router: Router, private appService: AppService, public snackBar: MatSnackBar, public SocketService: SocketService) { }
+
+  public authToken: any;
   public adminDetails = this.appService.getUserInfoFromLocalstorage();
   public allMeetings: any;
   public allUsers: any;
+  public onlineUsers: any = [];
 
   ngOnInit() {
+    this.authToken = Cookie.get('authtoken');
     this.getAllMeetings();
-    this.getAllUsers()
+    this.getAllUsers();
+    this.verifyUserConfirmation();
+    this.getOnlineUsers()
   }
 
   getAllMeetings(): any {
@@ -72,5 +81,25 @@ export class DashboardComponent implements OnInit {
     )
 
   }//end getAllUsers function
+
+
+  public verifyUserConfirmation: any = () => {
+
+    console.log('INSIDE VerifyUserConfirmation FUNCTION IN DASHBOARD COMPONENT')
+    console.log(this.authToken)
+    console.log(this.adminDetails.adminId)
+    this.SocketService.verifyUser()
+      .subscribe((data) => {
+        // this.disconnectedSocket = false;
+        this.SocketService.setUser(this.authToken);
+      });
+  }
+
+  public getOnlineUsers(): any {
+    this.SocketService.onlineUserList().subscribe(data => {
+      this.onlineUsers = data;
+      console.log(this.onlineUsers)
+    });
+  }
 
 }

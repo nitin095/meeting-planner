@@ -1,6 +1,5 @@
 <div class="container-fluid" [ngClass]="{'user-bg': userType == 'users','admin-bg': userType == 'admin'}">
   <div class="row justify-content-end fixed-top">
-    <span *ngIf="signUpForm" class="mr-5 mt-3 admin-button" (click)="signUpForm = false">Login</span>
     <span *ngIf="userType=='users'" class="mr-5 mt-3 admin-button" (click)="userType='admin'">Admin</span>
     <span *ngIf="userType=='admin'" class="mr-5 mt-3 admin-button" (click)="userType='users'">User</span>
   </div>
@@ -15,18 +14,18 @@
       <div class="row justify-content-center text-center mt-2">
 
         <!-- LOGIN FORM -->
-        <form #createLoginForm="ngForm" (ngSubmit)="login()" *ngIf="!signUpForm">
+        <form #createLoginForm="ngForm" (ngSubmit)="login()" *ngIf="loginForm&&!signUpForm&&!forgotForm">
           <div class="form-group">
             <label for="exampleInputEmail1">Email address</label>
-            <input type="email" name="email" class="form-control login" [(ngModel)]="email" placeholder="Enter email">
+            <input type="email" name="email" class="form-control login" [(ngModel)]="email" placeholder="Enter email" autofocus>
           </div>
           <div class="form-group">
             <label for="exampleInputPassword1">Password</label>
             <input type="password" name="password" class="form-control login" [(ngModel)]="password" placeholder="Password">
           </div>
           <button type="submit" class="btn btn-primary">Login<span *ngIf="userType == 'admin'"> as admin</span>
-          </button>
-          <small class="ml-3 d-none">Forgot password</small>
+          </button><br>
+          <small class="ml-3 link-btn" (click)="forgotForm=true">Forgot password</small>
         </form>
         <!-- END LOGIN FORM -->
 
@@ -35,35 +34,32 @@
         <form #createSignUpForm="ngForm" (ngSubmit)="signUp()" *ngIf="signUpForm">
           <div class="row justify-content-center">
             <mat-form-field class="col-5">
-              <input matInput name="firstName" placeholder="First name" maxlength="20" [(ngModel)]="firstName">
+              <input matInput name="firstName" placeholder="First name" maxlength="20" required [(ngModel)]="firstName" autofocus>
             </mat-form-field>
             <mat-form-field class="col-5">
-              <input matInput name="lastName" placeholder="Last name" maxlength="20" [(ngModel)]="lastName">
+              <input matInput name="lastName" placeholder="Last name" maxlength="20" required [(ngModel)]="lastName">
             </mat-form-field>
           </div>
           <div class="row justify-content-center">
             <mat-form-field class="col-5">
               <span matPrefix>+&nbsp;</span>
-              <input type="text" name="code" placeholder="Country code" aria-label="code" matInput [formControl]="codeFormControl"
-                [(ngModel)]="countryCode" [matAutocomplete]="auto">
+              <input type="text" name="code" placeholder="Country code" aria-label="code" required matInput
+                [formControl]="codeFormControl" [(ngModel)]="countryCode" [matAutocomplete]="auto">
               <mat-autocomplete #auto="matAutocomplete">
                 <mat-option *ngFor="let option of filteredOptions | async" [value]="option.code">
                   <small><img src="https://restcountries.eu/data/{{option.iso}}.svg" style="height:1rem;width:1.5rem">
                     {{option.country}} {{option.code}}</small>
                 </mat-option>
               </mat-autocomplete>
-              <!-- <mat-select placeholder="Country code" name="code" [(ngModel)]="code">
-                <mat-option *ngFor="let code of phoneCodesArray" value="code.code">{{code.code}} {{code.country}}</mat-option>
-              </mat-select> -->
             </mat-form-field>
             <mat-form-field class="col-5">
-              <input matInput name="mobile" placeholder="Mobile" type="number" [(ngModel)]="mobile" class="">
+              <input matInput name="mobile" placeholder="Mobile" type="number" required [(ngModel)]="mobile" class="">
             </mat-form-field>
           </div>
           <div class="row justify-content-center">
             <mat-form-field class="col-10">
-              <input matInput placeholder="Email" name='email' [formControl]="emailFormControl" [errorStateMatcher]="matcher"
-                [(ngModel)]="email">
+              <input matInput placeholder="Email" name='email' required [formControl]="emailFormControl"
+                [errorStateMatcher]="matcher" [(ngModel)]="email">
               <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
                 Please enter a valid email address
               </mat-error>
@@ -74,7 +70,8 @@
           </div>
           <div class="row justify-content-center">
             <mat-form-field class="col-10">
-              <input matInput placeholder="Password" name="password" [type]="hide ? 'password' : 'text'" [(ngModel)]="password">
+              <input matInput placeholder="Password" name="password" required [type]="hide ? 'password' : 'text'"
+                [(ngModel)]="password">
               <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
             </mat-form-field>
           </div>
@@ -87,11 +84,43 @@
         </form>
         <!-- END SIGN-UP FORM -->
 
+        <!-- FORGOT PASSWORD FORM -->
+        <form #createLoginForm="ngForm" (ngSubmit)="recoverPassword()" *ngIf="!signUpForm&&forgotForm">
+          <h4>Recover password</h4>
+          <span>Enter email address to send link to reset password.</span>
+          <div class="form-group my-4">
+            <label for="exampleInputEmail1">Email address</label>
+            <input type="email" name="email" class="form-control login" [(ngModel)]="email" placeholder="Enter email" autofocus>
+          </div>
+          <button type="submit" class="btn btn-primary">Send email </button><br>
+          <small (click)="forgotForm = false" class="link-btn">Back to login</small>
+        </form>
+        <!-- END FORGOT PASSWORD FORM -->
+
+           <!-- RESET PASSWORD FORM -->
+           <form #createLoginForm="ngForm" (ngSubmit)="resetPassword()" *ngIf="resetForm">
+              <h4>Reset password</h4>
+              <span>Enter new password.</span>
+              <div class="form-group my-4">
+                <label>Password</label>
+                <input type="password" name="password" required class="form-control login" [(ngModel)]="password" placeholder="Enter password" autofocus>
+              </div>
+              <div class="form-group my-4">
+                  <label>Confirm Password</label>
+                  <input type="password" name="retypePassword" required  class="form-control login" [(ngModel)]="retypePassword" placeholder="Retype password">
+                </div>
+              <button type="submit" class="btn btn-primary">Reset password </button><br>
+            </form>
+            <!-- END RESET PASSWORD FORM -->
+
       </div>
     </div>
   </div>
-  <div *ngIf="!signUpForm" class="row justify-content-center signup">
+  <div *ngIf="!signUpForm&&!resetForm" class="row justify-content-center signup">
     <span>Don't have an account? <span class="sign-up-link" (click)="signUpForm = true"> Signup</span></span>
+  </div>
+  <div *ngIf="signUpForm" class="row justify-content-center signup mt-5">
+    <span>Already have an account? <span class="sign-up-link" (click)="signUpForm = false"> Login</span></span>
   </div>
 </div>
 

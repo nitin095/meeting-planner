@@ -1,7 +1,5 @@
 'use strict'
-/**
- * Module Dependencies
- */
+// Dependencies
 const mongoose = require('mongoose'),
   Schema = mongoose.Schema;
 
@@ -51,6 +49,7 @@ let userSchema = new Schema({
   }
 
 })
+// edn userSchema
 
 
 mongoose.model('User', userSchema);

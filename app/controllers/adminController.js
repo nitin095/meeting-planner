@@ -1,3 +1,4 @@
+// modules dependencies.
 const mongoose = require('mongoose');
 const shortid = require('shortid');
 const time = require('./../libs/timeLib');
@@ -9,11 +10,11 @@ const check = require('../libs/checkLib')
 const token = require('../libs/tokenLib')
 const AuthModel = mongoose.model('Auth')
 
-/* Models */
+// Models
 const adminModel = mongoose.model('Admin')
 
 
-/* Get all admin Details */
+// Get all admin Details 
 let getAllAdmin = (req, res) => {
     adminModel.find()
         .select(' -__v -_id')
@@ -35,7 +36,7 @@ let getAllAdmin = (req, res) => {
         })
 }// end get all admins
 
-/* Get single admin details */
+// Get single admin details
 let getSingleAdmin = (req, res) => {
     adminModel.findOne({ 'adminId': req.params.adminId })
         .select('-password -__v -_id')
@@ -58,7 +59,7 @@ let getSingleAdmin = (req, res) => {
 }// end get single admin
 
 
-
+// Delet admin
 let deleteAdmin = (req, res) => {
 
     adminModel.findOneAndRemove({ 'adminId': req.params.adminId }).exec((err, result) => {
@@ -75,11 +76,12 @@ let deleteAdmin = (req, res) => {
             let apiResponse = response.generate(false, 'Deleted the admin successfully', 200, result)
             res.send(apiResponse)
         }
-    });// end user model find and remove
+    });
+
+}// end delete admin
 
 
-}// end delete user
-
+// Edit admin
 let editAdmin = (req, res) => {
 
     let options = req.body;
@@ -97,14 +99,12 @@ let editAdmin = (req, res) => {
             let apiResponse = response.generate(false, 'Admin details edited', 200, result)
             res.send(apiResponse)
         }
-    });// end user model update
-
+    });
 
 }// end edit user
 
 
-// start user signup function 
-
+// Signup function 
 let signUpFunction = (req, res) => {
 
     let validateUserInput = () => {
@@ -125,7 +125,8 @@ let signUpFunction = (req, res) => {
                 reject(apiResponse)
             }
         })
-    }// end validate admin input
+    }// end validate input
+
     let createAdmin = () => {
         return new Promise((resolve, reject) => {
             adminModel.findOne({ email: req.body.email })
@@ -163,14 +164,13 @@ let signUpFunction = (req, res) => {
                     }
                 })
         })
-    }// end create user function
-
+    }// end create admin function
 
     validateUserInput(req, res)
         .then(createAdmin)
         .then((resolve) => {
             delete resolve.password
-            let apiResponse = response.generate(false, 'Admin created', 200, resolve)
+            let apiResponse = response.generate(false, 'Admin created sucessfully', 200, resolve)
             res.send(apiResponse)
         })
         .catch((err) => {
@@ -180,28 +180,26 @@ let signUpFunction = (req, res) => {
 
 }// end user signup function 
 
-// start of login function 
+
+// Login function 
 let loginFunction = (req, res) => {
+   
     let findAdmin = () => {
         return new Promise((resolve, reject) => {
+
             if (req.body.email) {
                 console.log(req.body);
                 adminModel.findOne({ email: req.body.email}, (err, adminDetails) => {
-                    /* handle the error here if the User is not found */
                     if (err) {
                         console.log(err)
                         logger.error('Failed To Retrieve Admin Data', 'adminController: findAdmin()', 10)
-                        /* generate the error message and the api response message here */
                         let apiResponse = response.generate(true, 'Failed To Find admin Details', 500, null)
                         reject(apiResponse)
-                        /* if Company Details is not found */
                     } else if (check.isEmpty(adminDetails)) {
-                        /* generate the response and the console error message here */
                         logger.error('No admin Found', 'adminController: findAdmin()', 7)
                         let apiResponse = response.generate(true, 'No admin Details Found', 404, null)
                         reject(apiResponse)
                     } else {
-                        /* prepare the message and the api response here */
                         logger.info('Admin Found', 'adminController: findAdmin()', 10)
                         resolve(adminDetails)
                     }
@@ -212,7 +210,8 @@ let loginFunction = (req, res) => {
                 reject(apiResponse)
             }
         })
-    }
+    }// end findAdmin function
+
     let validatePassword = (retrievedAdminDetails) => {
         console.log("validatePassword");
         return new Promise((resolve, reject) => {
@@ -237,7 +236,7 @@ let loginFunction = (req, res) => {
                 }
             })
         })
-    }
+    }// end validatePassword
 
     let generateToken = (adminDetails) => {
         console.log("generate token");
@@ -254,7 +253,8 @@ let loginFunction = (req, res) => {
                 }
             })
         })
-    }
+    }// end generateToken
+
     let saveToken = (tokenDetails) => {
         console.log("save token");
         return new Promise((resolve, reject) => {
@@ -305,8 +305,9 @@ let loginFunction = (req, res) => {
                 }
             })
         })
-    }
+    }// end saveToken
 
+    // Promise call
     findAdmin(req,res)
         .then(validatePassword)
         .then(generateToken)
@@ -322,17 +323,10 @@ let loginFunction = (req, res) => {
             res.status(err.status)
             res.send(err)
         })
-}
+}// end login function 
 
 
-
-// end of the login function 
-
-
-/**
- * function to logout admin.
- * auth params: adminId.
- */
+// Logout function
 let logout = (req, res) => {
   AuthModel.findOneAndRemove({authToken: req.body.authToken}, (err, result) => {
     if (err) {
@@ -351,7 +345,7 @@ let logout = (req, res) => {
 } // end of the logout function.
 
 
-/* Get all admin Details */
+/* Get all admin auths */
 let getAllAuth = (req, res) => {
     AuthModel.find()
         .select(' -__v -_id')
@@ -371,7 +365,7 @@ let getAllAuth = (req, res) => {
                 res.send(apiResponse)
             }
         })
-}// end get all admins
+}// end get all admins auths
 
 module.exports = {
 

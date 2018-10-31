@@ -1,3 +1,4 @@
+// modules dependencies.
 const mongoose = require('mongoose');
 const shortid = require('shortid');
 const time = require('./../libs/timeLib');
@@ -10,12 +11,13 @@ const token = require('../libs/tokenLib');
 const AuthModel = mongoose.model('Auth');
 const mailer = require('../libs/mailer')
 
-/* Models */
+// Models 
 const UserModel = mongoose.model('User')
 
 
-/* Get all user Details */
+// Get all user Details 
 let getAllUser = (req, res) => {
+
     UserModel.find()
         .select(' -__v -_id')
         .lean()
@@ -34,10 +36,13 @@ let getAllUser = (req, res) => {
                 res.send(apiResponse)
             }
         })
+
 }// end get all users
 
-/* Get single user details */
+
+// Get single user details 
 let getSingleUser = (req, res) => {
+
     UserModel.findOne({ 'userId': req.params.userId })
         .select('-password -__v -_id')
         .lean()
@@ -56,10 +61,11 @@ let getSingleUser = (req, res) => {
                 res.send(apiResponse)
             }
         })
+
 }// end get single user
 
 
-
+// Delete user
 let deleteUser = (req, res) => {
 
     UserModel.findOneAndRemove({ 'userId': req.params.userId }).exec((err, result) => {
@@ -76,11 +82,12 @@ let deleteUser = (req, res) => {
             let apiResponse = response.generate(false, 'Deleted the user successfully', 200, result)
             res.send(apiResponse)
         }
-    });// end user model find and remove
-
+    });
 
 }// end delete user
 
+
+// Edit user
 let editUser = (req, res) => {
 
     let options = req.body;
@@ -98,14 +105,16 @@ let editUser = (req, res) => {
             let apiResponse = response.generate(false, 'User details edited', 200, result)
             res.send(apiResponse)
         }
-    });// end user model update
-
+    });
 
 }// end edit user
 
+
+// Password recovery function
 let forgotPassword = (req, res) => {
+
     let randomToken = passwordLib.generatePasswordResetToken();
-    console.log('random token is' + randomToken)
+
     UserModel.update({ 'email': req.body.email }, { 'resetPasswordToken': randomToken, 'resetPasswordExpires': time.getTimeAfter(30) }).exec((err, result) => {
         if (err) {
             logger.error(err.message, 'User Controller:forgotPassword', 10)
@@ -121,8 +130,11 @@ let forgotPassword = (req, res) => {
             res.send(apiResponse)
         }
     })
+
 }//end forgot password
 
+
+// Reset password function
 let resetPassword = (req, res) => {
 
     let newPassword = passwordLib.hashpassword(req.body.password)
@@ -143,20 +155,21 @@ let resetPassword = (req, res) => {
                 logger.error(err.message, 'User Controller: resetPasssword', 10)
                 let apiResponse = response.generate(true, 'Failed To reset password', 500, null)
                 res.send(apiResponse)
-            } else if (check.isEmpty(result)) {
+            } else if (result.nModified == 0) {
                 logger.info('Token is expired', 'User Controller: resetPasssword')
                 let apiResponse = response.generate(true, 'Token is expired', 404, null)
                 res.send(apiResponse)
-            } else {
+            }
+            else {
                 let apiResponse = response.generate(false, 'User passwod changed', 200, result)
                 res.send(apiResponse)
             }
         })
 
-}// end change password
+}// end reset password
 
-// start user signup function 
 
+// Signup function 
 let signUpFunction = (req, res) => {
 
     let validateUserInput = () => {
@@ -178,6 +191,7 @@ let signUpFunction = (req, res) => {
             }
         })
     }// end validate user input
+
     let createUser = () => {
         return new Promise((resolve, reject) => {
             UserModel.findOne({ email: req.body.email })
@@ -219,7 +233,7 @@ let signUpFunction = (req, res) => {
         })
     }// end create user function
 
-
+    // Promise call
     validateUserInput(req, res)
         .then(createUser)
         .then((resolve) => {
@@ -233,32 +247,28 @@ let signUpFunction = (req, res) => {
             res.send(err);
         })
 
-}// end user signup function 
+}// end signup function 
 
-// start of login function 
+
+// Login function 
 let loginFunction = (req, res) => {
+
     let findUser = () => {
-        console.log("findUser");
         return new Promise((resolve, reject) => {
+
             if (req.body.email) {
-                console.log("req body email is there");
                 console.log(req.body);
                 UserModel.findOne({ email: req.body.email }, (err, userDetails) => {
-                    /* handle the error here if the User is not found */
                     if (err) {
                         console.log(err)
                         logger.error('Failed To Retrieve User Data', 'userController: findUser()', 10)
-                        /* generate the error message and the api response message here */
                         let apiResponse = response.generate(true, 'Failed To Find User Details', 500, null)
                         reject(apiResponse)
-                        /* if Company Details is not found */
                     } else if (check.isEmpty(userDetails)) {
-                        /* generate the response and the console error message here */
                         logger.error('No User Found', 'userController: findUser()', 7)
                         let apiResponse = response.generate(true, 'No User Details Found', 404, null)
                         reject(apiResponse)
                     } else {
-                        /* prepare the message and the api response here */
                         logger.info('User Found', 'userController: findUser()', 10)
                         resolve(userDetails)
                     }
@@ -268,11 +278,13 @@ let loginFunction = (req, res) => {
                 let apiResponse = response.generate(true, '"email" parameter is missing', 400, null)
                 reject(apiResponse)
             }
-        })
-    }
+        })// end Promise
+    }// end find user
+
     let validatePassword = (retrievedUserDetails) => {
-        console.log("validatePassword");
+        console.log("validating Password");
         return new Promise((resolve, reject) => {
+
             passwordLib.comparePassword(req.body.password, retrievedUserDetails.password, (err, isMatch) => {
                 if (err) {
                     console.log(err)
@@ -292,12 +304,13 @@ let loginFunction = (req, res) => {
                     let apiResponse = response.generate(true, 'Wrong Password.Login Failed', 400, null)
                     reject(apiResponse)
                 }
-            })
-        })
-    }
+            })//end PasswordLic comaprePassword
+
+        })// end Promise
+    }// end validate password
 
     let generateToken = (userDetails) => {
-        console.log("generate token");
+        console.log("generating token");
         return new Promise((resolve, reject) => {
             token.generateToken(userDetails, (err, tokenDetails) => {
                 if (err) {
@@ -311,10 +324,12 @@ let loginFunction = (req, res) => {
                 }
             })
         })
-    }
+    }// end generate token
+
     let saveToken = (tokenDetails) => {
-        console.log("save token");
+        console.log("saving token");
         return new Promise((resolve, reject) => {
+
             AuthModel.findOne({ userId: tokenDetails.userId }, (err, retrievedTokenDetails) => {
                 if (err) {
                     console.log(err.message, 'userController: saveToken', 10)
@@ -359,11 +374,13 @@ let loginFunction = (req, res) => {
                             resolve(responseBody)
                         }
                     })
-                }
-            })
-        })
-    }
+                }// end else
+            })// end AuthModel
 
+        })// end Promisw
+    }// end save token
+
+    // Promise call
     findUser(req, res)
         .then(validatePassword)
         .then(generateToken)
@@ -379,18 +396,12 @@ let loginFunction = (req, res) => {
             res.status(err.status)
             res.send(err)
         })
-}
+}// end login function
 
 
-
-// end of the login function 
-
-
-/**
- * function to logout user.
- * auth params: userId.
- */
+// Logout function
 let logout = (req, res) => {
+
     AuthModel.findOneAndRemove({ authToken: req.body.authToken }, (err, result) => {
         if (err) {
             console.log(err)
@@ -405,7 +416,8 @@ let logout = (req, res) => {
             res.send(apiResponse)
         }
     })
-} // end of the logout function.
+
+} // end logout function.
 
 
 module.exports = {

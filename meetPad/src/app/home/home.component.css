@@ -76,3 +76,15 @@ button:hover{
     cursor: pointer;
     text-decoration: underline;  
 }
+.link-btn{
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+.link-btn:hover{
+    font-weight: 500;
+    color: #e46744
+}
+h4{
+    text-transform: capitalize;
+    color: gray
+}

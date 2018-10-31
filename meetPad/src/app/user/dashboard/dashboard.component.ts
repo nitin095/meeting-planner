@@ -3,6 +3,8 @@ import { Location } from '@angular/common';
 import { ActivatedRoute, Router } from "@angular/router";
 import { AppService } from './../../app.service';
 import { Cookie } from 'ng2-cookies/ng2-cookies';
+import { SocketService } from './../../socket.service';
+import { MatSnackBar } from '@angular/material';
 
 //importing ng-fullCalender 
 import { CalendarComponent } from 'ng-fullcalendar';
@@ -12,11 +14,12 @@ import { Options } from 'fullcalendar';
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
-  providers: [Location]
+  providers: [Location, SocketService]
 })
 
 export class DashboardComponent implements OnInit {
 
+  public authToken: any;
   public userDetails = this.appService.getUserInfoFromLocalstorage();
   public userId = this.userDetails.userId;
   public allMeetings: any = [];
@@ -24,7 +27,7 @@ export class DashboardComponent implements OnInit {
   calendarOptions: Options;
   @ViewChild(CalendarComponent) ucCalendar: CalendarComponent;
 
-  constructor(private _route: ActivatedRoute, private router: Router, private appService: AppService) { }
+  constructor(private _route: ActivatedRoute, private router: Router, private appService: AppService, public snackBar: MatSnackBar,public SocketService: SocketService) { }
 
   ngOnInit() {
     this._route.queryParams.subscribe(params => {
@@ -33,8 +36,12 @@ export class DashboardComponent implements OnInit {
         this.getUser(params['uid'])
       }
     });
-    this.loadCalender()
+    this.authToken = Cookie.get('authtoken');
+    this.loadCalender();
+    this.verifyUserConfirmation();
+    this.getAlerts();
   }
+  //end ngOnInit
 
   loadCalender(): any {
 
@@ -100,7 +107,7 @@ export class DashboardComponent implements OnInit {
   }
 
   getUser = (uid) => {
-    console.log('getUser called with uid: '+uid)
+    console.log('getUser called with uid: ' + uid)
     this.appService.getUser(uid).subscribe(
       response => {
         console.log(response)
@@ -128,5 +135,23 @@ export class DashboardComponent implements OnInit {
       console.log('some error occured')
     });
   } // end logout
+
+  public verifyUserConfirmation: any = () => {
+    this.SocketService.verifyUser()
+      .subscribe((data) => {
+        this.SocketService.setUser(this.authToken);
+      });
+  }
+
+  public getAlerts(): any {
+    this.SocketService.notificationAlert().subscribe((data)=>{
+      console.log('ALERT RECEIVED FROM SERVER!')
+      console.log(data);
+      let alertSnackBar = this.snackBar.open(`${data.title} @ ${data.time.start}`, 'Close', { verticalPosition: 'top', horizontalPosition: 'end', duration: 4000, });
+      alertSnackBar.afterDismissed().subscribe(() => {
+        console.log('The snack-bar was dismissed');
+      });
+    });
+  }//end getAlerts
 
 }

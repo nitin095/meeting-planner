@@ -15,7 +15,8 @@ import {
   MatAutocompleteModule,
   MatMenuModule,
   MatSnackBarModule,
-  MatTooltipModule
+  MatTooltipModule,
+  MatBadgeModule
 } from '@angular/material';
 
 @NgModule({
@@ -32,7 +33,8 @@ import {
     MatAutocompleteModule,
     MatMenuModule,
     MatSnackBarModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatBadgeModule
   ],
   declarations: [BackBtnComponent],
   exports: [
@@ -49,7 +51,8 @@ import {
     MatAutocompleteModule,
     MatMenuModule,
     MatSnackBarModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatBadgeModule
   ]
 })
 export class SharedModule { }

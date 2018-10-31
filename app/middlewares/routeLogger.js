@@ -1,10 +1,12 @@
+// application configuration
 const appConfig = require('./../../config/appConfig');
 
 
 let requestIpLogger = (req, res, next) => {
+
     let remoteIp = req.connection.remoteAddress + '://' + req.connection.remotePort;
     let realIp = req.headers['X-REAL-IP'];
-    console.log(req.method+" Request Made from " + remoteIp + ' for route' + req.originalUrl);
+    console.log(req.method + " Request Made from " + remoteIp + ' for route' + req.originalUrl);
 
     if (req.method === 'OPTIONS') {
         console.log('!OPTIONS');
@@ -18,21 +20,21 @@ let requestIpLogger = (req, res, next) => {
         headers["Access-Control-Allow-Headers"] = "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept";
         res.writeHead(200, headers);
         res.end();
-  } 
-  else{
+    }
+    else {
 
-     // enable or disable cors here 
-     res.header("Access-Control-Allow-Origin", appConfig.allowedCorsOrigin);
-     res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
-     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-     //console.log(res.header)
-     // end cors config
-     
-     next();
-  }
-    
-  
-}// end request ip logger function  
+        // enable or disable cors here 
+        res.header("Access-Control-Allow-Origin", appConfig.allowedCorsOrigin);
+        res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE, OPTIONS');
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        //console.log(res.header)
+        // end cors config
+
+        next();
+    }
+
+}// end requestIpLogger function  
+
 
 module.exports = {
     logIp: requestIpLogger

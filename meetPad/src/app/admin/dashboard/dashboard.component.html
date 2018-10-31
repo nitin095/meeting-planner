@@ -33,8 +33,8 @@
       </div>
       <!-- <div class="row justify-content-end align-items-center">
         <div class="col-auto"> -->
-          <button class="create-meeting-button" matTooltip="Create new meeting" [routerLink]="['/admin/meeting/create']">+</button>
-        <!-- </div>
+      <button class="create-meeting-button" matTooltip="Create new meeting" [routerLink]="['/admin/meeting/create']">+</button>
+      <!-- </div>
       </div> -->
     </div>
     <!-- end col-8 -->
@@ -53,7 +53,11 @@
         <div class="col">
           <div class="row justify-content-between align-items-center user" matRipple *ngFor="let user of allUsers | search : usersSearchInput :'users'"
             [routerLink]="['/dashboard']" [queryParams]="{uid: user.userId}">
-            <span class="col-12 lead">{{user.firstName}} {{user.lastName}}</span>
+            <span class="col-12 lead">{{user.firstName}} {{user.lastName}}
+              <fa-icon *ngIf="onlineUsers.includes(user.userId)" style="color:rgb(86, 218, 86);font-size: 0.8rem"
+                [icon]="faCircle"></fa-icon>
+                <mat-icon>circle</mat-icon>
+            </span>
             <small class="col-12">{{user.email}}</small>
             <small class="col-9">{{user.mobileNumber}}</small>
           </div>

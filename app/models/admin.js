@@ -1,7 +1,6 @@
 'use strict'
-/**
- * Module Dependencies
- */
+
+// Module Dependencies
 const mongoose = require('mongoose'),
   Schema = mongoose.Schema;
 
@@ -18,6 +17,10 @@ let adminSchema = new Schema({
     default: ''
   },
   lastName: {
+    type: String,
+    default: ''
+  },
+  userName: {
     type: String,
     default: ''
   },
@@ -38,7 +41,8 @@ let adminSchema = new Schema({
     default: ""
   }
 
-})
+}) 
+// end adminSchema
 
 
 mongoose.model('Admin', adminSchema);

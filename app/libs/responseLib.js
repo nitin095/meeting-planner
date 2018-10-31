@@ -1,15 +1,14 @@
-/* response generation library for api */
+// function to generate APIs response 
 let generate = (err, message, status, data) => {
-    let response = {
-      error: err,
-      message: message,
-      status: status,
-      data: data
-    }
-    return response
+  let response = {
+    error: err,
+    message: message,
+    status: status,
+    data: data
   }
-  
-  module.exports = {
-    generate: generate
-  }
-  
+  return response
+}
+
+module.exports = {
+  generate: generate
+}

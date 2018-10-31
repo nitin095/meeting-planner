@@ -1,6 +1,9 @@
 'use strict';
+
+// dependencies
 const nodemailer = require('nodemailer');
 
+// defining transport object
 let transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -11,7 +14,6 @@ let transporter = nodemailer.createTransport({
 
 let sendWelcomeMail = (userDetails) => {
 
-    // setup email data with unicode symbols
     let mailOptions = {
         from: 'sahil082018@gmail.com',
         to: 'shokeennitin1995@gmail.com',
@@ -25,18 +27,18 @@ let sendWelcomeMail = (userDetails) => {
         </div>`
     };
 
-    // send mail with defined transport object
+    // sending mail with defined transport object
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
             return console.log(error);
         }
-        console.log('Message sent to: %s', mailOptions.to);
+        console.log('Email sent to: %s', mailOptions.to);
     });
-}
+
+}// end sendWelcomeMail function
 
 let sendNotification = (meetingDetails) => {
 
-    // setup email data with unicode symbols
     let mailOptions = {
         from: 'sahil082018@gmail.com',
         to: 'shokeennitin1995@gmail.com',
@@ -53,18 +55,18 @@ let sendNotification = (meetingDetails) => {
         </div>`
     };
 
-    // send mail with defined transport object
+    // sending mail with defined transport object
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
             return console.log(error);
         }
         console.log('Message sent to: %s', mailOptions.to);
     });
-}
+
+} // end sendNotification function
 
 let sendNewMeetingMail = (meetingDetails) => {
   
-    // setup email data with unicode symbols
     let mailOptions = {
         from: 'sahil082018@gmail.com',
         to: 'shokeennitin1995@gmail.com',
@@ -82,18 +84,18 @@ let sendNewMeetingMail = (meetingDetails) => {
         </div>`
     };
 
-    // send mail with defined transport object
+    // sending mail with defined transport object
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
             return console.log(error);
         }
         console.log('Message sent to: %s', mailOptions.to);
     });
-}//end sendNewMeetingMail
+
+}// end sendNewMeetingMail
 
 let sendMeetingUpdateMail = (meetingDetails) => {
   
-    // setup email data with unicode symbols
     let mailOptions = {
         from: 'sahil082018@gmail.com',
         to: 'shokeennitin1995@gmail.com',
@@ -107,18 +109,19 @@ let sendMeetingUpdateMail = (meetingDetails) => {
         <tr><td style="color:grey">Notes</td><td>${meetingDetails.notes}</td></tr>
         </table>
         <p><button style="background:lightgrey;padding:5px 10px;border:none;border-radius:3px">More details</button></p>
-        <hr><h5>Sent by Meeting Planner</h5>
+        <hr><h5>Sent by Meet Pad</h5>
         </div>`
     };
 
-    // send mail with defined transport object
+    // sending mail with defined transport object
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
             return console.log(error);
         }
         console.log('Message sent to: %s', mailOptions.to);
     });
-}//end sendNewMeetingMail
+
+}// end sendNewMeetingMail
 
 
 let sendForgotPasswordEmail = (email,token) => {
@@ -134,14 +137,15 @@ let sendForgotPasswordEmail = (email,token) => {
         <p>Cheers!</p>`
     };
 
-    // send mail with defined transport object
+    // sending mail with defined transport object
     transporter.sendMail(mailOptions, (error, info) => {
         if (error) {
             return console.log(error);
         }
         console.log('Message sent to: %s', mailOptions.to);
     });
-}//end sendNewMeetingMail
+
+}// end sendForgotPasswordEmail
 
 
 module.exports = {

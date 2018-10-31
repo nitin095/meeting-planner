@@ -1,5 +1,5 @@
 <!-- navbar -->
-<nav class="navbar sticky-top navbar-expand-lg" [ngClass]="{'d-none': url == '/home'}">
+<nav class="navbar sticky-top navbar-expand-lg" [ngClass]="{'d-none': url.includes('/home')}">
     <a class="navbar-brand" [routerLink]="['/home']">Meet Pad</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
       aria-expanded="false" aria-label="Toggle navigation">

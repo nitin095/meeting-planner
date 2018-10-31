@@ -1,3 +1,4 @@
+// Dependencies
 const express = require('express');
 const router = express.Router();
 const adminController = require("./../../app/controllers/adminController");
@@ -19,9 +20,10 @@ module.exports.setRouter = (app) => {
     app.put(`${baseUrl}/:userId/edit`, auth.isAuthorized, adminController.editAdmin);
 
     app.post(`${baseUrl}/:userId/delete`, auth.isAuthorized, adminController.deleteAdmin);
-    
+
     app.post(`${baseUrl}/logout`, auth.isAuthorized, adminController.logout);
 
-    app.get(`${baseUrl}/auths`,adminController.getAllAuth);
+    app.get(`${baseUrl}/auths`, adminController.getAllAuth);
 
 }
+// end module.exports.setRouter

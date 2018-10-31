@@ -1,14 +1,15 @@
+// Dependencies
 const express = require('express');
 const router = express.Router();
 const meetingController = require("./../../app/controllers/meetingController");
 const appConfig = require("./../../config/appConfig")
 const auth = require('./../middlewares/auth')
 
+
 module.exports.setRouter = (app) => {
 
     let baseUrl = `${appConfig.apiVersion}/meetings`;
 
-    // params: userId.
     app.get(`${baseUrl}/:meetingId/details`,meetingController.getMeeting);
 
     app.get(`${baseUrl}/year/:year`,meetingController.getMeetingsByYear);
@@ -26,4 +27,6 @@ module.exports.setRouter = (app) => {
     app.get(`${baseUrl}/delete/:meetingId`,meetingController.deleteMeeting);
 
     app.put(`${baseUrl}/edit/:meetingId`,meetingController.editMeeting)
+
 }
+// end module.exports.setRouter

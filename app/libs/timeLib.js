@@ -1,3 +1,4 @@
+// dependencies
 const moment = require('moment')
 const momenttz = require('moment-timezone')
 const timeZone = 'Asia/Calcutta'
@@ -18,7 +19,7 @@ let getTimeAfter = (minutes) => {
   return moment().add(minutes, 'm').toDate();
 }
 
-let getTimeBefore = (date,minutes) => {
+let getTimeBefore = (date, minutes) => {
   return moment(date).subtract(minutes, 'm').toDate();
 }
 

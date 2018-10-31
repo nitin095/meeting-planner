@@ -1,7 +1,6 @@
 'use strict'
-/**
- * Module Dependencies
- */
+
+// Module Dependencies
 const mongoose = require('mongoose'),
     Schema = mongoose.Schema;
 
@@ -57,5 +56,7 @@ let meetingSchema = new Schema({
     }
 
 })
+// end meetingSchema
+
 
 mongoose.model('Meeting', meetingSchema);

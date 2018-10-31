@@ -1,3 +1,4 @@
+// dependencies
 const jwt = require('jsonwebtoken')
 const shortid = require('shortid')
 const secretKey = 'someVeryRandomStringThatNobodyCanGuess';
@@ -16,56 +17,55 @@ let generateToken = (data, cb) => {
     }
     let tokenDetails = {
       token: jwt.sign(claims, secretKey),
-      tokenSecret : secretKey
+      tokenSecret: secretKey
     }
     cb(null, tokenDetails)
   } catch (err) {
     console.log(err)
     cb(err, null)
   }
+
 }// end generate token 
 
-let verifyClaim = (token,secretKey,cb) => {
+let verifyClaim = (token, secretKey, cb) => {
+
   // verify a token symmetric
   jwt.verify(token, secretKey, function (err, decoded) {
-    if(err){
+    if (err) {
       console.log("error while verify token");
       console.log(err);
-      cb(err,null)
+      cb(err, null)
     }
-    else{
+    else {
       console.log("user verified");
       console.log(decoded);
-      cb(null,decoded);
-    }  
- 
- 
-  });
+      cb(null, decoded);
+    }
 
+  });
 
 }// end verify claim 
 
-let verifyClaimWithoutSecret = (token,cb) => {
+let verifyClaimWithoutSecret = (token, cb) => {
+
   // verify a token symmetric
   jwt.verify(token, secretKey, function (err, decoded) {
-    if(err){
+    if (err) {
       console.log("error while verify token");
       console.log(err);
-      cb(err,data)
+      cb(err, decoded)
     }
-    else{
+    else {
       console.log("user verified");
-      cb (null,decoded)
-    }  
- 
- 
-  });
+      cb(null, decoded)
+    }
 
+  });
 
 }// end verify claim 
 
 module.exports = {
   generateToken: generateToken,
-  verifyToken :verifyClaim,
+  verifyToken: verifyClaim,
   verifyClaimWithoutSecret: verifyClaimWithoutSecret
 }

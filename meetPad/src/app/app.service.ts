@@ -40,6 +40,16 @@ export class AppService {
     return myResponse;
   }// end login
 
+  recoverPassword(userType,data): Observable<any> {
+    let response = this._http.put(`${this.baseUrl}/${userType}/forgotPassword`, data)
+    return response
+  }
+
+  resetPassword(userType,data): Observable<any> {
+    let response = this._http.put(`${this.baseUrl}/${userType}/resetPassword`, data)
+    return response
+  }
+
   getAllMeetings(userId: string): Observable<any> {
     let response = this._http.get(`${this.baseUrl}/meetings/all?userId=${userId}`)
     return response

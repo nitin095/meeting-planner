@@ -1,10 +1,10 @@
+// dependencies.
 const bcrypt = require('bcrypt')
 const cryptoRandomString = require('crypto-random-string');
- 
-const saltRounds = 10
-
-/* Custom Library */
+// custom libraries 
 let logger = require('../libs/loggerLib')
+
+const saltRounds = 10
 
 let hashpassword = (myPlaintextPassword) => {
   let salt = bcrypt.genSaltSync(saltRounds)
@@ -29,9 +29,11 @@ let comparePasswordSync = (myPlaintextPassword, hash) => {
   return bcrypt.compareSync(myPlaintextPassword, hash)
 }
 
+
 let generatePasswordResetToken = () => {
   return cryptoRandomString(50);
 }
+
 
 module.exports = {
   hashpassword: hashpassword,

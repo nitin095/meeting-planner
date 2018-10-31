@@ -1,21 +1,20 @@
+//modules dependencies.
 const mongoose = require('mongoose');
 const shortid = require('shortid');
-var schedule = require('node-schedule');
+const  schedule = require('node-schedule');
 const time = require('./../libs/timeLib');
-const passwordLib = require('./../libs/generatePasswordLib');
-const response = require('./../libs/responseLib')
+const socketLib = require('./../libs/socketLib');
+const response = require('./../libs/responseLib');
 const logger = require('./../libs/loggerLib');
-const validateInput = require('../libs/paramsValidationLib')
-const check = require('../libs/checkLib')
-const token = require('../libs/tokenLib')
-const AuthModel = mongoose.model('Auth')
-const mailer = require('./../libs/mailer')
+const check = require('../libs/checkLib');
+const mailer = require('./../libs/mailer');
 
-/* Models */
+// Models
 const MeetingModel = mongoose.model('Meeting')
 
-/* Get single meeing details */
+// Get single meeting 
 let getMeeting = (req, res) => {
+
     MeetingModel.findOne({ 'meetingId': req.params.meetingId })
         .select('-password -__v -_id')
         .lean()
@@ -34,11 +33,14 @@ let getMeeting = (req, res) => {
                 res.send(apiResponse)
             }
         })
-}// end get single user
 
+}// end get single meeting
+
+
+// Get all meeting
 let getAllMeetings = (req, res) => {
-    console.log(req.query.userId)
-    MeetingModel.find({'invitees' : req.query.userId})
+
+    MeetingModel.find({ 'invitees': req.query.userId })
         .select('-__v -_id')
         .lean()
         .exec((err, result) => {
@@ -56,12 +58,13 @@ let getAllMeetings = (req, res) => {
                 res.send(apiResponse)
             }
         })
-}// end get all blogs
+
+}// end get all meetings
 
 
+// Get all meeting details by admin
 let getAllMeetingsByAdmin = (req, res) => {
-    console.log(req.query.adminId)
-    MeetingModel.find({'creator' : req.query.adminId})
+    MeetingModel.find({ 'creator': req.query.adminId })
         .select('-__v -_id')
         .lean()
         .exec((err, result) => {
@@ -79,11 +82,10 @@ let getAllMeetingsByAdmin = (req, res) => {
                 res.send(apiResponse)
             }
         })
-}// end get all blogs
+}// end get all meetings by admin
 
-/**
- * function to read all meetings by year.
- */
+
+// Get all meetings by year.
 let getMeetingsByYear = (req, res) => {
     MeetingModel.find({ "time.start": { "$gte": new Date(req.params.year, 0, 1), "$lt": new Date(req.params.year, 11, 30) } })
         .select('-__v -_id')
@@ -106,9 +108,7 @@ let getMeetingsByYear = (req, res) => {
 }// end get all meetings by year
 
 
-/**
- * function to read all meetings by month.
- */
+//Get all meetings by month.
 let getMeetingsByMonth = (req, res) => {
     MeetingModel.find({ "time.start": { "$gte": new Date(req.params.year, req.params.month, 1), "$lt": new Date(req.params.year, req.params.month, 31) } })
         .select('-__v -_id')
@@ -131,9 +131,7 @@ let getMeetingsByMonth = (req, res) => {
 }// end get all meetings by month
 
 
-/**
- * function to read all meetings by month.
- */
+//Get all meetings by date.
 let getMeetingsByDate = (req, res) => {
     MeetingModel.find({ "time.start": { "$gte": new Date(req.params.year, req.params.month, req.params.day), "$lt": new Date(req.params.year, req.params.month, req.params.day + 1) } })
         .select('-__v -_id')
@@ -156,15 +154,14 @@ let getMeetingsByDate = (req, res) => {
 }// end get all meetings by month
 
 
-/**
- * function to create q meeting.
- */
+//Create a meeting.
 let createMeeting = (req, res) => {
+
     let newMeeting = () => {
+
         return new Promise((resolve, reject) => {
             console.log(req.body)
             if (check.isEmpty(req.body.title) || check.isEmpty(req.body.startTime)) {
-                console.log("403, forbidden request");
                 let apiResponse = response.generate(true, 'required parameters are missing', 403, null)
                 reject(apiResponse)
             } else {
@@ -205,24 +202,35 @@ let createMeeting = (req, res) => {
                         console.log('Success in meeting creation')
                         resolve(result)
                     }
-                }) // end new blog save
-            }
-        }) // end new blog promise
-    } // end create blog function
+                }) // end newMeeting save
+            }// end else
+        }) // end new Meeting promise
 
-    // making promise call.
+    } // end newMeeting function
+
+    // promise call
     newMeeting()
         .then((result) => {
             let apiResponse = response.generate(false, 'Meeting Created successfully', 200, result);
             res.send(apiResponse);
-            schedule.scheduleJob(time.getTimeAfter(0.5), function(){
+
+            //sending New Meeting mail to all users and notification to online users after 30 seconds
+            schedule.scheduleJob(time.getTimeAfter(0.5), function () {
+                socketLib.sendAlert(result)
                 mailer.sendNewMeetingMail(result)
             });
+
+            //Scheduling Alerts 
             for (let alert of result.alerts) {
                 if (alert.alertType == 'email') {
                     console.log(`Email alert set: ${alert.minutes} minutes before.`);
-                    schedule.scheduleJob(time.getTimeBefore(result.time.start,alert.minutes), function () {
+                    schedule.scheduleJob(time.getTimeBefore(result.time.start, alert.minutes), function () {
                         mailer.sendNotification(result)
+                    });
+                } else {
+                    console.log(`Notification alert set: ${alert.minutes} minutes before.`);
+                    schedule.scheduleJob(time.getTimeBefore(result.time.start, alert.minutes), function () {
+                        socketLib.sendAlert(result)
                     });
                 }
             }
@@ -231,15 +239,18 @@ let createMeeting = (req, res) => {
             console.log(error)
             res.send(error)
         })
-}
 
+}//end create meeting
+
+
+//Edit meeting
 let editMeeting = (req, res) => {
 
     let options = req.body;
     MeetingModel.update({ 'meetingId': req.params.meetingId }, options).exec((err, result) => {
         if (err) {
             console.log(err)
-            logger.error(err.message, 'Meeting Controller:editMeeting', 10)
+            logger.error(err.message, 'Meeting Controller: editMeeting', 10)
             let apiResponse = response.generate(true, 'Failed To edit Meeting details', 500, null)
             res.send(apiResponse)
         } else if (check.isEmpty(result)) {
@@ -249,17 +260,16 @@ let editMeeting = (req, res) => {
         } else {
             let apiResponse = response.generate(false, 'Meeting details edited', 200, result)
             res.send(apiResponse);
-            schedule.scheduleJob(time.getTimeAfter(1), function(){
+            schedule.scheduleJob(time.getTimeAfter(1), function () {
                 mailer.sendMeetingUpdateMail(result)
             });
         }
-    });// end user model update
-
+    });
 
 }// end edit user
 
 
-
+//Delete meeting
 let deleteMeeting = (req, res) => {
 
     MeetingModel.findOneAndRemove({ 'meetingId': req.params.meetingId }).exec((err, result) => {
@@ -269,17 +279,16 @@ let deleteMeeting = (req, res) => {
             let apiResponse = response.generate(true, 'Failed To delete meeting', 500, null)
             res.send(apiResponse)
         } else if (check.isEmpty(result)) {
-            logger.info('No User Found', 'meeting Controller: deleteMeeting')
-            let apiResponse = response.generate(true, 'No User Found', 404, null)
+            logger.info('No Meeting Found', 'meeting Controller: deleteMeeting')
+            let apiResponse = response.generate(true, 'No meeting Found', 404, null)
             res.send(apiResponse)
         } else {
-            let apiResponse = response.generate(false, 'Deleted the meeting successfully', 200, result)
+            let apiResponse = response.generate(false, 'Meeting deleted successfully', 200, result)
             res.send(apiResponse)
         }
-    });// end user model find and remove
+    });
 
-
-}// end delete user
+}// end delete meeting
 
 
 module.exports = {
