@@ -1,43 +1,107 @@
 <div class="container" *ngIf="meetingDetails">
-  <div class="row">
-    <div class="col-12 display-1">
+
+  <div class="row pt-5 pb-4 justify-content-end">
+    <div class="col-1 pt-3">
+      <back-btn class="country-back-btn pr-2"></back-btn>
+    </div>
+    <div class="col-11 display-4">
       <span>{{meetingDetails.title}}</span>
+      <button mat-stroked-button color="accent" matTooltip="edit meeting" *ngIf="isAdmin" (click)="editMeeting()">Edit</button>
+      <button mat-stroked-button color="accent" matTooltip="Cancel meeting" *ngIf="isAdmin" data-toggle="modal"
+        data-target="#exampleModal">Cancel</button>
     </div>
-    <div class="col-12" *ngIf="creator">
-      <span class="lead">By {{creator.firstName}}</span>
-    </div>
-  </div>
-  <div class="row mt-5 mb-3">
-    <div class="col-12 display-4">
+    <div class="col-11 meeting-date">
       {{meetingDetails.time.start | date: 'd LLL yyy'}}
     </div>
-    <div class="col-6 lead">
-      Start: {{meetingDetails.time.start | date:'h:mm a'}}
-    </div>
-    <div class="col-6 lead">
-      End: {{meetingDetails.time.end | date:'h:mm a'}}
+    <div class="col-11" *ngIf="creator">
+      <span class="lead">By {{creator.firstName}}-Admin</span>
     </div>
   </div>
-  <div class="row align-items-center my-2">
-    <div class="col-2"><span class="lead">Location</span></div>
-    <div class="col-10"><span class="display-4">{{meetingDetails.location}}</span></div>
+  <!-- end row -->
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Cancel Meeting</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Are you sure you want to cancel {{meetingDetails.title}}
+        </div>
+        <div class="modal-footer">
+          <button mat-stroked-button color="accent" data-dismiss="modal">Close</button>
+          <button mat-stroked-button color="primary" (click)="deleteMeeting()">Cancel Meeting</button>
+          <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+          <!-- <button type="button" class="btn btn-primary" (click)="deleteMeeting()">Cancel Metting</button> -->
+        </div>
+      </div>
+    </div>
   </div>
-  <div class="row align-items-center my-2">
-    <div class="col-2"><span class="lead">Notes</span></div>
-    <div class="col-10"><span class="display-4">{{meetingDetails.notes}}</span></div>
-  </div>
-  <div class="row align-items-center my-2">
-    <div class="col-2"><span class="lead">Invitees</span></div>
-    <div class="col-10">
-      <div class="row">
-        <div class="col-4" *ngFor="let invitee of invitees">
-          <div class="card m-2 py-2 px-3">
-            <span class="lead">{{invitee.firstName}} {{invitee.lastName}}</span>
-            <small>{{invitee.email}}</small>
-            <small>{{invitee.mobileNumber}}</small>
+
+  <div class="row">
+    <div class="col-1"></div>
+    <div class="col">
+      <div class="card-deck text-center">
+        <div class="card" matRipple>
+          <div class="card-body">
+            <mat-icon>access_time</mat-icon>
+            <h5 class="card-title">Starts</h5>
+            <p class="card-text lead">{{meetingDetails.time.start | date:'h:mm a'}}.</p>
+          </div>
+        </div>
+        <div class="card" matRipple>
+          <div class="card-body">
+            <mat-icon>timer_off</mat-icon>
+            <h5 class="card-title">Ends</h5>
+            <p class="card-text lead">
+              {{meetingDetails.time.end | date:'h:mm a'}}
+              <span *ngIf="!meetingDetails.time.end">N/A</span>
+            </p>
+          </div>
+        </div>
+        <div class="card" matRipple>
+          <div class="card-body">
+            <mat-icon>location_on</mat-icon>
+            <h5 class="card-title">Location</h5>
+            <p class="card-text lead">{{meetingDetails.location}}
+              <span *ngIf="!meetingDetails.location">N/A</span>
+            </p>
           </div>
         </div>
       </div>
     </div>
   </div>
+
+  <div class="row py-4 justify-content-center">
+    <div class="col-1"></div>
+    <div class="col-auto">
+      <div class="row notes-row align-items-center">
+        <mat-icon>speaker_notes</mat-icon>
+        <div class="col-2 lead text-right">Notes</div>
+        <div class="col-auto">{{meetingDetails.notes}}</div>
+        <div class="col-auto" *ngIf="!meetingDetails.notes">No notes</div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row py-4 px-5" *ngIf="invitees">
+    <div class="col-12 lead">Invitees ({{invitees.length}})
+      <hr>
+    </div>
+    <div class="col-auto" *ngFor="let invitee of invitees">
+      <div class="card m-2 py-2 px-3" matRipple>
+        <span class="lead">{{invitee.firstName}} {{invitee.lastName}}</span>
+        <small>{{invitee.email}}</small>
+        <small>{{invitee.mobileNumber}}</small>
+      </div>
+    </div>
+  </div>
+
 </div>
+
+<!-- end container -->

@@ -30,22 +30,22 @@ export class AppService {
     localStorage.setItem('userInfo', JSON.stringify(data))
   }
 
-  signup(userType,data): Observable<any> {
+  signup(userType, data): Observable<any> {
     let response = this._http.post(`${this.baseUrl}/${userType}/signup`, data);
     return response
   }
 
-  login(userType,data): Observable<any> {
+  login(userType, data): Observable<any> {
     let myResponse = this._http.post(`${this.baseUrl}/${userType}/login`, data)
     return myResponse;
   }// end login
 
-  recoverPassword(userType,data): Observable<any> {
+  recoverPassword(userType, data): Observable<any> {
     let response = this._http.put(`${this.baseUrl}/${userType}/forgotPassword`, data)
     return response
   }
 
-  resetPassword(userType,data): Observable<any> {
+  resetPassword(userType, data): Observable<any> {
     let response = this._http.put(`${this.baseUrl}/${userType}/resetPassword`, data)
     return response
   }
@@ -65,16 +65,16 @@ export class AppService {
     return response
   }
 
-getUser(userId): Observable<any> {
-  console.log(`auth tokrn is ${this.authToken}`)
-  let response = this._http.get(`${this.baseUrl}/users/${userId}/details?authToken=${this.authToken}`)
-  return response
-}
+  getUser(userId): Observable<any> {
+    console.log(`auth tokrn is ${this.authToken}`)
+    let response = this._http.get(`${this.baseUrl}/users/${userId}/details?authToken=${this.authToken}`)
+    return response
+  }
 
-getAdmin(adminId): Observable<any> {
-  let response = this._http.get(`${this.baseUrl}/admin/${adminId}/details?authToken=${this.authToken}`)
-  return response
-}
+  getAdmin(adminId): Observable<any> {
+    let response = this._http.get(`${this.baseUrl}/admin/${adminId}/details?authToken=${this.authToken}`)
+    return response
+  }
 
   getAllUsers(authToken): Observable<any> {
     let response = this._http.get(`${this.baseUrl}/users/view/all?authToken=${authToken}`)
@@ -91,4 +91,15 @@ getAdmin(adminId): Observable<any> {
     let response = this._http.post(`${this.baseUrl}/meetings/create`, data)
     return response
   }
+
+  editMeeting(meetingId, data): Observable<any> {
+    let response = this._http.put(`${this.baseUrl}/meetings/edit/${meetingId}`, data)
+    return response
+  }
+
+  deleteMeeting(meetingId): Observable<any> {
+    let response = this._http.get(`${this.baseUrl}/meetings/delete/${meetingId}`)
+    return response
+  }
+
 }

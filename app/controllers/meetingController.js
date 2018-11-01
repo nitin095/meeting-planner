@@ -37,7 +37,7 @@ let getMeeting = (req, res) => {
 }// end get single meeting
 
 
-// Get all meeting
+// Get all meetings of a user
 let getAllMeetings = (req, res) => {
 
     MeetingModel.find({ 'invitees': req.query.userId })
@@ -283,7 +283,7 @@ let deleteMeeting = (req, res) => {
             let apiResponse = response.generate(true, 'No meeting Found', 404, null)
             res.send(apiResponse)
         } else {
-            let apiResponse = response.generate(false, 'Meeting deleted successfully', 200, result)
+            let apiResponse = response.generate(false, 'Meeting deleted successfully', 200, null)
             res.send(apiResponse)
         }
     });

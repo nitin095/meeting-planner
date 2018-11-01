@@ -19,6 +19,7 @@ export class DashboardComponent implements OnInit {
 
   constructor(private router: Router, private appService: AppService, public snackBar: MatSnackBar, public SocketService: SocketService) { }
 
+  public searchInput: string;
   public authToken: any;
   public adminDetails = this.appService.getUserInfoFromLocalstorage();
   public allMeetings: any;

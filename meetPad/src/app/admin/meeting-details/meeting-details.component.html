@@ -3,7 +3,7 @@
     <div class="col-8 px-5 py-2 create-meeting-col">
       <div class="row align-items-center">
         <back-btn class="country-back-btn"></back-btn>
-        <div class="col-auto display-4">Create new meeting</div>
+        <div class="col-auto display-4">{{pageTitle}}</div>
       </div>
       <div class="row mt-2 justify-content-center">
         <mat-form-field class="col-10">
@@ -96,7 +96,7 @@
           </div>
         </div>
         <div class="col-auto my-4">
-          <button matRipple type="submit" class="create-meeting-btn" (click)="createMeeting()">Create meeting</button>
+          <button matRipple type="submit" class="create-meeting-btn" (click)="createMeeting()">{{buttonText}}</button>
         </div>
       </div>
     </div>

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { AppService } from './../../app.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Cookie } from 'ng2-cookies/ng2-cookies';
+import { Location } from '@angular/common';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
   selector: 'app-meeting-details',
@@ -14,14 +16,19 @@ export class MeetingDetailsComponent implements OnInit {
   public meetingDetails: any;
   public creator: any;
   public invitees: any;
+  public isAdmin: boolean;
 
-  constructor(private _route: ActivatedRoute, public router: Router, private appService: AppService) { }
+  constructor(private _route: ActivatedRoute, public router: Router, private routeLocation: Location, private appService: AppService, public snackBar: MatSnackBar) { }
 
   ngOnInit() {
     this._route.params.subscribe(params => {
       let meetingId = this._route.snapshot.paramMap.get('meetingId');
       this.getMeeting(meetingId);
     });
+    if (this.userDetails.adminId) {
+      this.isAdmin = true
+    }
+
   }
 
   getMeeting = (meetingId) => {
@@ -43,6 +50,8 @@ export class MeetingDetailsComponent implements OnInit {
 
     this.appService.getAdmin(creatorId).subscribe(
       response => {
+        console.log(creatorId)
+        console.log('ADMIN DETAILS ARE')
         console.log(response)
         this.creator = response.data
       },
@@ -71,5 +80,20 @@ export class MeetingDetailsComponent implements OnInit {
     }
 
   }//end getInvitees
+
+  editMeeting = () => {
+    this.router.navigate([`/admin/meeting/${this.meetingDetails.meetingId}/edit`]);
+  }
+
+  deleteMeeting = () => {
+    this.appService.deleteMeeting(this.meetingDetails.meetingId).subscribe(
+      response => {
+        this.snackBar.open('Meeting deleted sucessfully', 'Close', { verticalPosition: 'top', horizontalPosition: 'end', duration: 4000, });
+        console.log('meeting deleted sucessfully');
+        console.log(response)
+        this.routeLocation.back()
+      }
+    )
+  }
 
 }

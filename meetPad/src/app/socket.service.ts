@@ -4,9 +4,6 @@ import * as io from 'socket.io-client';
 import { Observable } from 'rxjs';
 import { Cookie } from 'ng2-cookies/ng2-cookies';
 
-// import 'rxjs/add/operator/catch';
-// import 'rxjs/add/operator/do';
-// import 'rxjs/add/operator/toPromise';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { HttpErrorResponse, HttpParams } from "@angular/common/http";
 
@@ -15,7 +12,7 @@ import { HttpErrorResponse, HttpParams } from "@angular/common/http";
 })
 export class SocketService {
 
-  private url = 'localhost:3000';
+  private url = 'http://localhost:3000';
   private socket;
 
   constructor(public http: HttpClient) {

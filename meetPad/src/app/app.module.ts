@@ -5,8 +5,8 @@ import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 import { HttpClientModule } from "@angular/common/http";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-// import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
-
+import { DlDateTimePickerDateModule } from 'angular-bootstrap-datetimepicker';
+ 
 import { AdminModule } from './admin/admin.module';
 import { UserModule } from './user/user.module';
 import { SharedModule } from './shared/shared.module';
@@ -16,12 +16,14 @@ import { HomeComponent } from './home/home.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 
 import { AppService } from "./app.service";
+import { ProfileComponent } from './profile/profile.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,
@@ -30,8 +32,7 @@ import { AppService } from "./app.service";
     ReactiveFormsModule,
     BrowserAnimationsModule,
     FontAwesomeModule,
-    // OwlDateTimeModule,
-    // OwlNativeDateTimeModule,
+    DlDateTimePickerDateModule,
     AdminModule,
     UserModule,
     SharedModule,

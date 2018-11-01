@@ -1,8 +1,9 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
 
-/* ng-pick-datetime */
 @import "~ng-pick-datetime/assets/style/picker.min.css";
 
+@import '~bootstrap/dist/css/bootstrap.min.css';
+@import '~open-iconic/font/css/open-iconic-bootstrap.css';
 
 .fc-toolbar{
     padding-top: 1rem
