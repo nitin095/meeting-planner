@@ -16,6 +16,12 @@ nav .navbar-brand{
 nav a{
     color: #e46744
 }
+.navbar-toggler{
+    color: #e46744
+}
+.navbar-nav{
+    background: rgba(255, 255, 255, 0.9);
+}
 button:focus{
 outline: none
 }

@@ -147,9 +147,15 @@ export class HomeComponent implements OnInit {
     this.appService.signup(this.userType, signupData).subscribe(
       response => {
         if (response.status === 200) {
+          this.snackBar.open('Account created sucessfully', 'Close', { verticalPosition: 'top', horizontalPosition: 'end', duration: 3000, });
           console.log(response)
           setTimeout(() => {
-            this.router.navigate(['/home']);
+            this.signUpForm = false;
+            this.loginForm = true;
+            this.password = undefined;
+            this.firstName = undefined;
+            this.lastName = undefined;
+            this.mobile = undefined;
           }, 1000)
         } else {
           this.snackBar.open(response.message, 'Close', { verticalPosition: 'top', horizontalPosition: 'end', duration: 4000, });

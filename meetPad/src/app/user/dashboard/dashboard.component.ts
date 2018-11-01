@@ -21,19 +21,26 @@ export class DashboardComponent implements OnInit {
 
   public authToken: any;
   public userDetails = this.appService.getUserInfoFromLocalstorage();
-  public userId = this.userDetails.userId;
+  public userId: string;
+  public userName: string;
   public allMeetings: any = [];
+  public isAdmin: boolean;
 
   calendarOptions: Options;
   @ViewChild(CalendarComponent) ucCalendar: CalendarComponent;
 
-  constructor(private _route: ActivatedRoute, private router: Router, private appService: AppService, public snackBar: MatSnackBar,public SocketService: SocketService) { }
+  constructor(private _route: ActivatedRoute, private router: Router, private appService: AppService, public snackBar: MatSnackBar, public SocketService: SocketService) { }
 
   ngOnInit() {
     this._route.queryParams.subscribe(params => {
       if (params['uid']) {
+        this.isAdmin = true
         this.userId = params['uid'];
         this.getUser(params['uid'])
+      } else {
+        this.isAdmin = false
+        this.userName = `${this.userDetails.firstName} ${this.userDetails.lastName}`;
+        this.userId = this.userDetails.userId
       }
     });
     this.authToken = Cookie.get('authtoken');
@@ -106,12 +113,12 @@ export class DashboardComponent implements OnInit {
     this.ucCalendar.fullCalendar('gotoDate', event.date);
   }
 
-  getUser = (uid) => {
+  private getUser = (uid) => {
     console.log('getUser called with uid: ' + uid)
     this.appService.getUser(uid).subscribe(
       response => {
-        console.log(response)
-        this.userDetails = response.data
+        this.userDetails = response.data;
+        this.userName = `${this.userDetails.firstName} ${this.userDetails.lastName}`
       },
       error => {
         console.log(`ERROE! ${error.errorMessage}`)
@@ -144,7 +151,7 @@ export class DashboardComponent implements OnInit {
   }
 
   public getAlerts(): any {
-    this.SocketService.notificationAlert().subscribe((data)=>{
+    this.SocketService.notificationAlert().subscribe((data) => {
       console.log('ALERT RECEIVED FROM SERVER!')
       console.log(data);
       let alertSnackBar = this.snackBar.open(`${data.title} @ ${data.time.start}`, 'Close', { verticalPosition: 'top', horizontalPosition: 'end', duration: 4000, });

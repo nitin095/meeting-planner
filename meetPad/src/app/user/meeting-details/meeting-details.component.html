@@ -5,10 +5,16 @@
       <back-btn class="country-back-btn pr-2"></back-btn>
     </div>
     <div class="col-11 display-4">
-      <span>{{meetingDetails.title}}</span>
-      <button mat-stroked-button color="accent" matTooltip="edit meeting" *ngIf="isAdmin" (click)="editMeeting()">Edit</button>
-      <button mat-stroked-button color="accent" matTooltip="Cancel meeting" *ngIf="isAdmin" data-toggle="modal"
-        data-target="#exampleModal">Cancel</button>
+      <div class="row">
+        <span class="col-12 col-sm-auto pr-4">{{meetingDetails.title}}</span>
+        <div class="col-3 col-md-auto mx-2">
+          <button mat-stroked-button color="accent" matTooltip="edit meeting" *ngIf="isAdmin" (click)="editMeeting()">Edit</button>
+        </div>
+        <div class="col-3 col-md-auto mx-2">
+          <button mat-stroked-button color="accent" matTooltip="Cancel meeting" *ngIf="isAdmin"
+            data-toggle="modal" data-target="#exampleModal">Cancel</button>
+        </div>
+      </div>
     </div>
     <div class="col-11 meeting-date">
       {{meetingDetails.time.start | date: 'd LLL yyy'}}
@@ -35,15 +41,13 @@
         <div class="modal-footer">
           <button mat-stroked-button color="accent" data-dismiss="modal">Close</button>
           <button mat-stroked-button color="primary" (click)="deleteMeeting()">Cancel Meeting</button>
-          <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
-          <!-- <button type="button" class="btn btn-primary" (click)="deleteMeeting()">Cancel Metting</button> -->
         </div>
       </div>
     </div>
   </div>
 
   <div class="row">
-    <div class="col-1"></div>
+    <div class="d-none d-sm-block col-1"></div>
     <div class="col">
       <div class="card-deck text-center">
         <div class="card" matRipple>
@@ -81,9 +85,9 @@
     <div class="col-auto">
       <div class="row notes-row align-items-center">
         <mat-icon>speaker_notes</mat-icon>
-        <div class="col-2 lead text-right">Notes</div>
-        <div class="col-auto">{{meetingDetails.notes}}</div>
-        <div class="col-auto" *ngIf="!meetingDetails.notes">No notes</div>
+        <div class="col-2 lead mr-3">Notes</div>
+        <div class="col">{{meetingDetails.notes}}</div>
+        <div class="col" *ngIf="!meetingDetails.notes">No notes</div>
       </div>
     </div>
   </div>
@@ -93,7 +97,7 @@
     <div class="col-12 lead">Invitees ({{invitees.length}})
       <hr>
     </div>
-    <div class="col-auto" *ngFor="let invitee of invitees">
+    <div class="col-12 col-md-auto" *ngFor="let invitee of invitees">
       <div class="card m-2 py-2 px-3" matRipple>
         <span class="lead">{{invitee.firstName}} {{invitee.lastName}}</span>
         <small>{{invitee.email}}</small>

@@ -1,19 +1,24 @@
 <div class="container-fluid">
   <div class="row">
-    <div class="col-3 detail-col">
+
+    <div class="col-3 detail-col d-none d-md-block">
       <div class="row name py-2">
         <div class="col-12">
-          <back-btn class="country-back-btn pr-2"></back-btn>
+          <back-btn *ngIf="isAdmin" class="country-back-btn pr-2"></back-btn>
         </div>
-        <div class="col-12 display-4" style="line-height: 1em">{{userDetails.firstName}} {{userDetails.lastName}}</div>
+        <div class="col-12 display-4" style="line-height: 1em">{{userName}}</div>
         <div class="col-12 lead">{{allMeetings.length}} upcoming meetings.</div>
       </div>
     </div>
-    <div class="col-9 calender-col">
+
+    <div class="col-12 col-md-9 calender-col">
       <div *ngIf="calendarOptions" style="height:90vh;">
         <ng-fullcalendar #ucCalendar [options]="calendarOptions" (eventClick)="eventClick($event.detail)" (eventDrop)="updateEvent($event.detail)"
           (eventResize)="updateEvent($event.detail)" (dayClick)="dayClick($event.detail)"></ng-fullcalendar>
       </div>
     </div>
+
   </div>
+  <!-- end row -->
 </div>
+<!-- end container-fluid -->

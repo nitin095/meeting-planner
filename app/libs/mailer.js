@@ -50,7 +50,7 @@ let sendNotification = (meetingDetails) => {
         <tr><td style="color:grey">Who</td><td>${meetingDetails.invitees}</td></tr>
         <tr><td style="color:grey">Notes</td><td>${meetingDetails.notes}</td></tr>
         </table>
-        <p><button style="background:lightgrey;padding:5px 10px;border:none;border-radius:3px">More details</button></p>
+        <p><button style="background:lightgrey;padding:5px 10px;border:none;border-radius:3px"><a href="http://ec2-13-233-119-109.ap-south-1.compute.amazonaws.com">More details</a></button></p>
         <hr><h5>Sent by Meeting Planner</h5>
         </div>`
     };
@@ -79,7 +79,7 @@ let sendNewMeetingMail = (meetingDetails) => {
         <tr><td style="color:grey">Who</td><td>${meetingDetails.invitees}</td></tr>
         <tr><td style="color:grey">Notes</td><td>${meetingDetails.notes}</td></tr>
         </table>
-        <p><button style="background:lightgrey;padding:5px 10px;border:none;border-radius:3px">More details</button></p>
+        <p><button style="background:lightgrey;padding:5px 10px;border:none;border-radius:3px"><a href="http://ec2-13-233-119-109.ap-south-1.compute.amazonaws.com">More details</a></button></p>
         <hr><h5>Sent by Meeting Planner</h5>
         </div>`
     };
@@ -108,7 +108,7 @@ let sendMeetingUpdateMail = (meetingDetails) => {
         <tr><td style="color:grey">Who</td><td>${meetingDetails.invitees}</td></tr>
         <tr><td style="color:grey">Notes</td><td>${meetingDetails.notes}</td></tr>
         </table>
-        <p><button style="background:lightgrey;padding:5px 10px;border:none;border-radius:3px">More details</button></p>
+        <p><button style="background:lightgrey;padding:5px 10px;border:none;border-radius:3px"><a href="http://ec2-13-233-119-109.ap-south-1.compute.amazonaws.com">More details</a></button></p>
         <hr><h5>Sent by Meet Pad</h5>
         </div>`
     };
@@ -131,7 +131,7 @@ let sendForgotPasswordEmail = (email,token) => {
         to: 'shokeennitin1995@gmail.com',
         subject: `Reset your password`,
         html: ` <h3>Hi!</h3>
-        <p>You requested for a password reset, kindly use this <a href="http://localhost:3000/resetPassword?token=${token}">link</a> to reset your password</p>
+        <p>You requested for a password reset, kindly use this <a href="http://ec2-13-233-119-109.ap-south-1.compute.amazonaws.com/resetPassword?token=${token}">link</a> to reset your password</p>
         <p>This link is valid for 30 minutes.</p>
         <br>
         <p>Cheers!</p>`

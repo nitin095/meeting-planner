@@ -4,12 +4,13 @@
     <span *ngIf="userType=='admin'" class="mr-5 mt-3 admin-button" (click)="userType='users'">User</span>
   </div>
   <div class="row align-items-center justify-content-center" style="height:100vh">
-    <div class="col-auto display-box">
-      <div class="row text-center align-items-center">
-        <span class="col-12 display-3">Meet Pad <small *ngIf="userType=='admin'" class="admin-badge">Admin</small>
-        </span>
+    <div class="col-12 col-sm-9 col-md-auto display-box">
+
+      <div class="row text-center align-items-center justify-content-center">
+        <span class="col-12 display-3">Meet Pad</span>
+        <small *ngIf="userType=='admin'" class="col-auto admin-badge">Admin</small>
         <span *ngIf="userType=='users'" class="col-12">Get track of all your meetings and get notified.</span>
-        <span *ngIf="userType=='admin'" class="col-12">Create and manage meetins and get your users notified</span>
+        <span *ngIf="userType=='admin'" class="col-12">Create and manage meetings and get your users notified</span>
       </div>
       <div class="row justify-content-center text-center mt-2">
 
@@ -17,7 +18,8 @@
         <form #createLoginForm="ngForm" (ngSubmit)="login()" *ngIf="loginForm&&!signUpForm&&!forgotForm">
           <div class="form-group">
             <label for="exampleInputEmail1">Email address</label>
-            <input type="email" name="email" class="form-control login" [(ngModel)]="email" placeholder="Enter email" autofocus>
+            <input type="email" name="email" class="form-control login" [(ngModel)]="email" placeholder="Enter email"
+              autofocus>
           </div>
           <div class="form-group">
             <label for="exampleInputPassword1">Password</label>
@@ -34,7 +36,8 @@
         <form #createSignUpForm="ngForm" (ngSubmit)="signUp()" *ngIf="signUpForm">
           <div class="row justify-content-center">
             <mat-form-field class="col-5">
-              <input matInput name="firstName" placeholder="First name" maxlength="20" required [(ngModel)]="firstName" autofocus>
+              <input matInput name="firstName" placeholder="First name" maxlength="20" required [(ngModel)]="firstName"
+                autofocus>
             </mat-form-field>
             <mat-form-field class="col-5">
               <input matInput name="lastName" placeholder="Last name" maxlength="20" required [(ngModel)]="lastName">
@@ -90,28 +93,31 @@
           <span>Enter email address to send link to reset password.</span>
           <div class="form-group my-4">
             <label for="exampleInputEmail1">Email address</label>
-            <input type="email" name="email" class="form-control login" [(ngModel)]="email" placeholder="Enter email" autofocus>
+            <input type="email" name="email" class="form-control login" [(ngModel)]="email" placeholder="Enter email"
+              autofocus>
           </div>
           <button type="submit" class="btn btn-primary">Send email </button><br>
           <small (click)="forgotForm = false" class="link-btn">Back to login</small>
         </form>
         <!-- END FORGOT PASSWORD FORM -->
 
-           <!-- RESET PASSWORD FORM -->
-           <form #createLoginForm="ngForm" (ngSubmit)="resetPassword()" *ngIf="resetForm">
-              <h4>Reset password</h4>
-              <span>Enter new password.</span>
-              <div class="form-group my-4">
-                <label>Password</label>
-                <input type="password" name="password" required class="form-control login" [(ngModel)]="password" placeholder="Enter password" autofocus>
-              </div>
-              <div class="form-group my-4">
-                  <label>Confirm Password</label>
-                  <input type="password" name="retypePassword" required  class="form-control login" [(ngModel)]="retypePassword" placeholder="Retype password">
-                </div>
-              <button type="submit" class="btn btn-primary">Reset password </button><br>
-            </form>
-            <!-- END RESET PASSWORD FORM -->
+        <!-- RESET PASSWORD FORM -->
+        <form #createLoginForm="ngForm" (ngSubmit)="resetPassword()" *ngIf="resetForm">
+          <h4>Reset password</h4>
+          <span>Enter new password.</span>
+          <div class="form-group my-4">
+            <label>Password</label>
+            <input type="password" name="password" required class="form-control login" [(ngModel)]="password"
+              placeholder="Enter password" autofocus>
+          </div>
+          <div class="form-group my-4">
+            <label>Confirm Password</label>
+            <input type="password" name="retypePassword" required class="form-control login" [(ngModel)]="retypePassword"
+              placeholder="Retype password">
+          </div>
+          <button type="submit" class="btn btn-primary">Reset password </button><br>
+        </form>
+        <!-- END RESET PASSWORD FORM -->
 
       </div>
     </div>

@@ -15,7 +15,7 @@ export class MeetingDetailsComponent implements OnInit {
   public userDetails = this.appService.getUserInfoFromLocalstorage();
   public meetingDetails: any;
   public creator: any;
-  public invitees: any;
+  public invitees: any = [];
   public isAdmin: boolean;
 
   constructor(private _route: ActivatedRoute, public router: Router, private routeLocation: Location, private appService: AppService, public snackBar: MatSnackBar) { }
@@ -50,9 +50,6 @@ export class MeetingDetailsComponent implements OnInit {
 
     this.appService.getAdmin(creatorId).subscribe(
       response => {
-        console.log(creatorId)
-        console.log('ADMIN DETAILS ARE')
-        console.log(response)
         this.creator = response.data
       },
       error => {
@@ -64,7 +61,7 @@ export class MeetingDetailsComponent implements OnInit {
 
   getInvitees = (userIds) => {
 
-    this.invitees = new Array;
+    // this.invitees = new Array;
 
     for (let id of userIds) {
       this.appService.getUser(id).subscribe(

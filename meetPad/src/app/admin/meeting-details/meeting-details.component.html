@@ -1,10 +1,13 @@
 <div class="container-fluid">
   <div class="row">
-    <div class="col-8 px-5 py-2 create-meeting-col">
+
+    <div class="col-12 col-md-8 px-5 py-2 create-meeting-col">
+
       <div class="row align-items-center">
         <back-btn class="country-back-btn"></back-btn>
-        <div class="col-auto display-4">{{pageTitle}}</div>
+        <div class="col-11 col-md-auto display-4">{{pageTitle}}</div>
       </div>
+
       <div class="row mt-2 justify-content-center">
         <mat-form-field class="col-10">
           <input matInput #titleInput placeholder="Title" maxlength="50" required [(ngModel)]="title" [ngModelOptions]="{standalone: true}">
@@ -26,6 +29,7 @@
           <textarea matInput #notesInput maxlength="200" [(ngModel)]="notes" placeholder="Notes"></textarea>
           <mat-hint align="end">{{notesInput.value?.length || 0}}/200</mat-hint>
         </mat-form-field>
+
         <div class="col-10 my-4">
           <span class="my-2">Invitees</span>
           <small class="pl-4" *ngIf="invitees.length<1">Select invitees from users list</small>
@@ -37,23 +41,26 @@
             </mat-chip>
           </mat-chip-list>
         </div>
+        
         <div class="col-10">
+
           <div class="row alert-row">
-            <div class="col-auto" [ngClass]="{'mt-4':alerts.length>1}">
+            <div class="col-12 col-md-auto" [ngClass]="{'mt-4':alerts.length>1}">
               <span>Alerts</span>
             </div>
             <div class="col">
+
               <div class="row" *ngFor="let alert of alerts">
-                <mat-form-field class="col-3">
+                <mat-form-field class="col-4 col-md-3">
                   <mat-select [(value)]="alert.type">
                     <mat-option value="email">Email</mat-option>
                     <mat-option value="notification">Notification</mat-option>
                   </mat-select>
                 </mat-form-field>
-                <mat-form-field class="col-2">
+                <mat-form-field class="col-2 col-md-2">
                   <input matInput type="number" [(ngModel)]="alert.number" [ngModelOptions]="{standalone: true}">
                 </mat-form-field>
-                <mat-form-field class="col-3">
+                <mat-form-field class="col-4 col-md-3">
                   <mat-select [(value)]="alert.timeType">
                     <mat-option value="minutes">minutes</mat-option>
                     <mat-option value="hours">hours</mat-option>
@@ -65,6 +72,7 @@
                 </button>
               </div>
               <!-- end row -->
+
               <span class="add-alert-btn" (click)="addAlert()" style="align-self: center">Add
                 alert</span>
             </div>
@@ -99,9 +107,11 @@
           <button matRipple type="submit" class="create-meeting-btn" (click)="createMeeting()">{{buttonText}}</button>
         </div>
       </div>
+
     </div>
     <!-- end col-8 -->
-    <div class="col-4 invitees-col" *ngIf="allUsers">
+
+    <div class="col-12 col-md-4 invitees-col" *ngIf="allUsers">
       <div class="row heading-row sticky-top">
         <div class="col">
           <h3 class="text-uppercase pt-3 pb-2">Select invitees</h3>
@@ -129,7 +139,9 @@
       </div>
     </div>
     <!-- end col-4 -->
+
   </div>
   <!-- end row -->
+
 </div>
 <!-- end container-fluid -->

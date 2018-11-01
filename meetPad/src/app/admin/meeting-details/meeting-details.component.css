@@ -64,3 +64,36 @@ h3{
 .add-alert-btn:hover{
     color: #572b5e
 }
+
+
+/* Media queries */
+
+/*extra small devices*/
+@media screen and (max-width: 575px) {    
+    
+.create-meeting-col{
+    height: auto;
+    overflow-y: auto;
+}
+
+}
+
+/*small devices*/
+@media screen and (min-width: 576px) and (max-width: 767px) {
+   
+.create-meeting-col{
+    height: auto;
+    overflow-y: auto;
+}
+
+ }
+ 
+ /*medium devices*/
+ @media screen and (min-width: 768px) and (max-width: 991px) {
+
+ }
+ 
+ /*large devices*/
+ @media screen and (min-width: 992px) and (max-width: 1199px) {
+
+ }
