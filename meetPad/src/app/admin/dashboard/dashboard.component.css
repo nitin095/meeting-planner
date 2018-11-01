@@ -6,12 +6,10 @@
 }
 .h-sm{
     letter-spacing: 0.5px;
-    /* color: black; */
     font-weight: 400
 }
 .heading-row{
     background-image: linear-gradient(to left, #e46744, #ca3d50, #a5195a, #75055f, #3b0a5b);
-    /* background: rgba(87, 43, 94, 0.95) */
     z-index: 1;
 }
 h3{
@@ -24,9 +22,6 @@ h3{
     -webkit-box-shadow: 4px 0px 32px -5px rgba(0,0,0,0.75);
     -moz-box-shadow: 4px 0px 32px -5px rgba(0,0,0,0.75);
     box-shadow: 2px 0px 32px -5px rgba(0,0,0,0.55);
-}
-.admin-header{
-   
 }
 .admin-header .display-4{
     color: #e46744;

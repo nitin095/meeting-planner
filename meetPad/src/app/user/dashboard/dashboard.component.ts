@@ -117,8 +117,9 @@ export class DashboardComponent implements OnInit {
     console.log('getUser called with uid: ' + uid)
     this.appService.getUser(uid).subscribe(
       response => {
+        console.log(response)
         this.userDetails = response.data;
-        this.userName = `${this.userDetails.firstName} ${this.userDetails.lastName}`
+        this.userName = `${response.data.firstName} ${response.data.lastName}`
       },
       error => {
         console.log(`ERROE! ${error.errorMessage}`)

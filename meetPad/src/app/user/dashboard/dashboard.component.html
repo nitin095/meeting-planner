@@ -6,7 +6,7 @@
         <div class="col-12">
           <back-btn *ngIf="isAdmin" class="country-back-btn pr-2"></back-btn>
         </div>
-        <div class="col-12 display-4" style="line-height: 1em">{{userName}}</div>
+        <div class="col-12 display-4" *ngIf="userName" style="line-height: 1em">{{userName}}</div>
         <div class="col-12 lead">{{allMeetings.length}} upcoming meetings.</div>
       </div>
     </div>
@@ -16,6 +16,9 @@
         <ng-fullcalendar #ucCalendar [options]="calendarOptions" (eventClick)="eventClick($event.detail)" (eventDrop)="updateEvent($event.detail)"
           (eventResize)="updateEvent($event.detail)" (dayClick)="dayClick($event.detail)"></ng-fullcalendar>
       </div>
+
+      <button *ngIf="isAdmin" class="create-meeting-button" matTooltip="Create new meeting" [routerLink]="['/admin/meeting/create']">+</button>
+
     </div>
 
   </div>
