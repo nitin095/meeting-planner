@@ -35,9 +35,10 @@ export class MeetingDetailsComponent implements OnInit {
 
     this.appService.getMeetingDetails(meetingId).subscribe(
       response => {
+        console.log(response)
         this.meetingDetails = response.data;
-        this.getCreator(this.meetingDetails.creator);
-        this.getInvitees(this.meetingDetails.invitees)
+        this.getCreator(response.data.creator);
+        this.getInvitees(response.data.invitees)
       },
       error => {
         console.log(error.errorMessage)
@@ -47,16 +48,17 @@ export class MeetingDetailsComponent implements OnInit {
   }//end getMeeting
 
   getCreator = (creatorId) => {
+    console.log('inside grtcreator. AdminId is '+creatorId)
 
     this.appService.getAdmin(creatorId).subscribe(
       response => {
+        console.log(response)
         this.creator = response.data
       },
       error => {
         console.log(`ERROR! ${error.errorMessage}`)
       }
     )
-
   }//end getCreator
 
   getInvitees = (userIds) => {
@@ -66,9 +68,7 @@ export class MeetingDetailsComponent implements OnInit {
     for (let id of userIds) {
       this.appService.getUser(id).subscribe(
         response => {
-          console.log(response)
           this.invitees.push(response.data);
-          console.log(this.invitees)
         },
         error => {
           console.log(`ERROR! ${error.errorMessage}`)

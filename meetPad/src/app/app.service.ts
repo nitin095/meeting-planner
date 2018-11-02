@@ -9,10 +9,10 @@ import { Cookie } from 'ng2-cookies/ng2-cookies';
 export class AppService {
 
   private baseUrl = 'http://ec2-13-233-92-229.ap-south-1.compute.amazonaws.com/api/v1';
-  private authToken = Cookie.get('authtoken');
+  private authToken: string;
 
   constructor(private _http: HttpClient) {
-    console.log('app-service called')
+    console.log('app-service called');
   }
 
   private handleError(err: HttpErrorResponse) {
@@ -72,6 +72,7 @@ export class AppService {
   }
 
   getAdmin(adminId): Observable<any> {
+    this.authToken = Cookie.get('authtoken');
     let response = this._http.get(`${this.baseUrl}/admin/${adminId}/details?authToken=${this.authToken}`)
     return response
   }
