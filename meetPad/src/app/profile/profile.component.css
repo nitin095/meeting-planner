@@ -1,0 +1,11 @@
+.display-4{
+    letter-spacing: 2px
+}
+.lead{
+    font-weight: 400;
+    letter-spacing: 1px;
+    color: #e46744
+}
+button:focus{
+    outline: none
+}

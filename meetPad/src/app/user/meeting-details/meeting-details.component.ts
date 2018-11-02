@@ -48,8 +48,8 @@ export class MeetingDetailsComponent implements OnInit {
   }//end getMeeting
 
   getCreator = (creatorId) => {
+    
     console.log('inside grtcreator. AdminId is '+creatorId)
-
     this.appService.getAdmin(creatorId).subscribe(
       response => {
         console.log(response)

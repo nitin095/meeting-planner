@@ -1,12 +1,12 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from "@angular/common/http";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { DlDateTimePickerDateModule } from 'angular-bootstrap-datetimepicker';
- 
+
 import { AdminModule } from './admin/admin.module';
 import { UserModule } from './user/user.module';
 import { SharedModule } from './shared/shared.module';
@@ -38,6 +38,7 @@ import { ProfileComponent } from './profile/profile.component';
     SharedModule,
     RouterModule.forRoot([
       { path: 'home', component: HomeComponent },
+      { path: 'profile', component: ProfileComponent },
       { path: '', redirectTo: 'home', pathMatch: 'full' },
       { path: '**', component: NotFoundComponent }
     ])

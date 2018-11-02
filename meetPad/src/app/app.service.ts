@@ -9,7 +9,7 @@ import { Cookie } from 'ng2-cookies/ng2-cookies';
 export class AppService {
 
   private baseUrl = 'http://ec2-13-233-92-229.ap-south-1.compute.amazonaws.com/api/v1';
-  private authToken: string;
+  private authToken: string = Cookie.get('authtoken');
 
   constructor(private _http: HttpClient) {
     console.log('app-service called');
@@ -66,8 +66,12 @@ export class AppService {
   }
 
   getUser(userId): Observable<any> {
-    console.log(`auth tokrn is ${this.authToken}`)
     let response = this._http.get(`${this.baseUrl}/users/${userId}/details?authToken=${this.authToken}`)
+    return response
+  }
+
+  editUser(userType, userId, data): Observable<any> {
+    let response = this._http.put(`${this.baseUrl}/${userType}/${userId}/edit?authToken=${this.authToken}`, data)
     return response
   }
 

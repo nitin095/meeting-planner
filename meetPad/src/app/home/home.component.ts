@@ -58,6 +58,7 @@ export class HomeComponent implements OnInit {
   public retypePassword: string;
 
   ngOnInit() {
+    
     this._route.queryParams.subscribe(params => {
       if (params['token']) {
         this.loginForm = false;
@@ -65,6 +66,7 @@ export class HomeComponent implements OnInit {
         this.resetToken = params['token'];
       }
     });
+
     this.userType = 'users';
     this.signUpForm = false;
     for (let country in this.phoneCodes) {

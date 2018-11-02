@@ -23,7 +23,8 @@
     box-shadow: none;
     border-bottom: 1px solid #633670;
     border-radius: 0;
-    font-weight: 600
+    font-weight: 600;
+    z-index: inherit;
 }
 .fc-button:focus{
     outline: none

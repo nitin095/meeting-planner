@@ -20,7 +20,7 @@
       {{meetingDetails.time.start | date: 'd LLL yyy'}}
     </div>
     <div class="col-11" *ngIf="creator">
-      <span class="lead">By {{creator.firstName}}-Admin</span>
+      <span class="lead">By {{creator.firstName}}-admin</span>
     </div>
   </div>
   <!-- end row -->
@@ -40,7 +40,7 @@
         </div>
         <div class="modal-footer">
           <button mat-stroked-button color="accent" data-dismiss="modal">Close</button>
-          <button mat-stroked-button color="primary" (click)="deleteMeeting()">Cancel Meeting</button>
+          <button mat-stroked-button color="primary" data-dismiss="modal" (click)="deleteMeeting()">Cancel Meeting</button>
         </div>
       </div>
     </div>
@@ -97,7 +97,7 @@
     <div class="col-12 lead">Invitees ({{invitees.length}})
       <hr>
     </div>
-    <div class="col-12 col-md-auto" *ngFor="let invitee of invitees">
+    <div class="col-12 col-md-4" *ngFor="let invitee of invitees">
       <div class="card m-2 py-2 px-3" matRipple>
         <span class="lead">{{invitee.firstName}} {{invitee.lastName}}</span>
         <small>{{invitee.email}}</small>
