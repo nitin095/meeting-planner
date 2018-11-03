@@ -3,6 +3,8 @@ import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/fo
 import { ErrorStateMatcher } from '@angular/material/core';
 import { map, startWith } from 'rxjs/operators';
 import { Observable } from 'rxjs';
+import { Cookie } from 'ng2-cookies/ng2-cookies';
+import { Router } from '@angular/router';
 import { AppService } from './../app.service';
 import { MatSnackBar } from '@angular/material';
 import { isString } from 'util';
@@ -42,7 +44,7 @@ export class ProfileComponent implements OnInit {
   public userDetails = this.appService.getUserInfoFromLocalstorage();
   private userType: string = 'users';
 
-  constructor(private appService: AppService, public snackBar: MatSnackBar) { }
+  constructor(private router: Router, private appService: AppService, public snackBar: MatSnackBar) { }
 
   ngOnInit() {
 
@@ -71,24 +73,28 @@ export class ProfileComponent implements OnInit {
   }
   // end ngOnInit
 
+
   private _filter(value: string): string[] {
     if (isString(value)) {
       const filterValue = value.toLowerCase();
       return this.options.filter(option => option.country.toLowerCase().includes(filterValue));
     }
-  }
+  }//end _filter
+
 
   public editProfile() {
     this.edit = true;
     this.emailFormControl.enable();
     this.codeFormControl.enable();
-  }
+  }//end editProfile
+
 
   public cancelEditProfile() {
     this.edit = false;
     this.emailFormControl.disable();
     this.codeFormControl.disable()
-  }
+  }//cancelEditProfile
+
 
   public saveUserDetails() {
     if (this.userType === 'users')
@@ -140,5 +146,34 @@ export class ProfileComponent implements OnInit {
       }
     )
   }//end recoverPassword
+
+
+  public deleteUser() {
+
+    this.appService.deleteUser(this.userType, this.userDetails.userId).subscribe(
+      response => {
+        if (response.status == 200) {
+          this.snackBar.open('Your account has been deleted sucessfuly.', 'Close', { verticalPosition: 'top', horizontalPosition: 'end', duration: 4000, });
+          this.appService.logout(this.userType).subscribe(
+            response => {
+              Cookie.delete('authtoken');
+              Cookie.delete('receiverId');
+              Cookie.delete('receiverName');
+              this.router.navigate(['/']);
+            }
+          );
+        } else {
+          this.snackBar.open('Some error occured.', 'Close', { verticalPosition: 'top', horizontalPosition: 'end', duration: 4000, });
+          console.log(response)
+        }
+      },
+      error => {
+        this.snackBar.open('Some error occured. Try again', 'Close', { verticalPosition: 'top', horizontalPosition: 'end', duration: 4000, });
+        console.log(error)
+      }
+    )
+
+  }//deleteUser
+
 
 }

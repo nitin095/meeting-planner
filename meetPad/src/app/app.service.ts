@@ -20,11 +20,10 @@ export class AppService {
     console.log(err.message);
     return Observable.throw(err.message)
   }
-
+  
   public getUserInfoFromLocalstorage = () => {
     return JSON.parse(localStorage.getItem('userInfo'));
-  } // end getUserInfoFromLocalstorage
-
+  }
 
   public setUserInfoInLocalStorage = (data) => {
     localStorage.setItem('userInfo', JSON.stringify(data))
@@ -72,6 +71,11 @@ export class AppService {
 
   editUser(userType, userId, data): Observable<any> {
     let response = this._http.put(`${this.baseUrl}/${userType}/${userId}/edit?authToken=${this.authToken}`, data)
+    return response
+  }
+
+  deleteUser(userType, userId): Observable<any> {
+    let response = this._http.post(`${this.baseUrl}/${userType}/${userId}/delete?authToken=${this.authToken}`, '')
     return response
   }
 
