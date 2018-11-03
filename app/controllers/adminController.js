@@ -36,6 +36,7 @@ let getAllAdmin = (req, res) => {
         })
 }// end get all admins
 
+
 // Get single admin details
 let getSingleAdmin = (req, res) => {
     adminModel.findOne({ 'adminId': req.params.adminId })
@@ -103,6 +104,64 @@ let editAdmin = (req, res) => {
 
 }// end edit user
 
+
+// Password recovery function
+let forgotPassword = (req, res) => {
+
+    let randomToken = passwordLib.generatePasswordResetToken();
+
+    adminModel.update({ 'email': req.body.email }, { 'resetPasswordToken': randomToken, 'resetPasswordExpires': time.getTimeAfter(30) }).exec((err, result) => {
+        if (err) {
+            logger.error(err.message, 'Admin Controller:forgotPassword', 10)
+            let apiResponse = response.generate(true, 'Failed To find admin email', 500, null)
+            res.send(apiResponse)
+        } else if (check.isEmpty(result)) {
+            logger.info('Email not Found', 'Admin Controller: forgotPassword')
+            let apiResponse = response.generate(true, 'No Email Found', 404, null)
+            res.send(apiResponse)
+        } else {
+            mailer.sendForgotPasswordEmail(req.body.email, randomToken, 'admin')
+            let apiResponse = response.generate(false, 'Password change requested', 200, result)
+            res.send(apiResponse)
+        }
+    })
+
+}//end forgot password
+
+
+// Reset password function
+let resetPassword = (req, res) => {
+   
+    let newPassword = passwordLib.hashpassword(req.body.password)
+    let now = Date.now()
+
+    adminModel.update({
+        'resetPasswordToken': req.body.token,
+        'resetPasswordExpires': {
+            $gt: now
+        }
+    }, {
+            'password': newPassword,
+            'resetPasswordToken': undefined,
+            'resetPasswordExpires': undefined
+        }).exec((err, result) => {
+            if (err) {
+                console.log(err)
+                logger.error(err.message, 'User Controller: resetPasssword', 10)
+                let apiResponse = response.generate(true, 'Failed To reset password', 500, null)
+                res.send(apiResponse)
+            } else if (result.nModified == 0) {
+                logger.info('Token is expired', 'User Controller: resetPasssword')
+                let apiResponse = response.generate(true, 'Token is expired', 404, null)
+                res.send(apiResponse)
+            }
+            else {
+                let apiResponse = response.generate(false, 'Password changed', 200, result)
+                res.send(apiResponse)
+            }
+        })
+
+}// end reset password
 
 // Signup function 
 let signUpFunction = (req, res) => {
@@ -183,13 +242,13 @@ let signUpFunction = (req, res) => {
 
 // Login function 
 let loginFunction = (req, res) => {
-   
+
     let findAdmin = () => {
         return new Promise((resolve, reject) => {
 
             if (req.body.email) {
                 console.log(req.body);
-                adminModel.findOne({ email: req.body.email}, (err, adminDetails) => {
+                adminModel.findOne({ email: req.body.email }, (err, adminDetails) => {
                     if (err) {
                         console.log(err)
                         logger.error('Failed To Retrieve Admin Data', 'adminController: findAdmin()', 10)
@@ -204,7 +263,7 @@ let loginFunction = (req, res) => {
                         resolve(adminDetails)
                     }
                 });
-               
+
             } else {
                 let apiResponse = response.generate(true, '"email" parameter is missing', 400, null)
                 reject(apiResponse)
@@ -308,7 +367,7 @@ let loginFunction = (req, res) => {
     }// end saveToken
 
     // Promise call
-    findAdmin(req,res)
+    findAdmin(req, res)
         .then(validatePassword)
         .then(generateToken)
         .then(saveToken)
@@ -328,20 +387,20 @@ let loginFunction = (req, res) => {
 
 // Logout function
 let logout = (req, res) => {
-  AuthModel.findOneAndRemove({authToken: req.body.authToken}, (err, result) => {
-    if (err) {
-        console.log(err)
-        logger.error(err.message, 'Admin Controller: logout', 10)
-        let apiResponse = response.generate(true, `error occurred: ${err.message}`, 500, null)
-        res.send(apiResponse)
-    } else if (check.isEmpty(result)) {
-        let apiResponse = response.generate(true, 'Already Logged Out or Invalid adminId', 404, null)
-        res.send(apiResponse)
-    } else {
-        let apiResponse = response.generate(false, 'Logged Out Successfully', 200, null)
-        res.send(apiResponse)
-    }
-  })
+    AuthModel.findOneAndRemove({ authToken: req.body.authToken }, (err, result) => {
+        if (err) {
+            console.log(err)
+            logger.error(err.message, 'Admin Controller: logout', 10)
+            let apiResponse = response.generate(true, `error occurred: ${err.message}`, 500, null)
+            res.send(apiResponse)
+        } else if (check.isEmpty(result)) {
+            let apiResponse = response.generate(true, 'Already Logged Out or Invalid adminId', 404, null)
+            res.send(apiResponse)
+        } else {
+            let apiResponse = response.generate(false, 'Logged Out Successfully', 200, null)
+            res.send(apiResponse)
+        }
+    })
 } // end of the logout function.
 
 
@@ -350,6 +409,8 @@ module.exports = {
     signUpFunction: signUpFunction,
     getAllAdmin: getAllAdmin,
     editAdmin: editAdmin,
+    forgotPassword: forgotPassword,
+    resetPassword: resetPassword,
     deleteAdmin: deleteAdmin,
     getSingleAdmin: getSingleAdmin,
     loginFunction: loginFunction,

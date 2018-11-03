@@ -191,7 +191,7 @@ module.exports.setRouter = (app) => {
     app.put(`${baseUrl}/forgotPassword`, userController.forgotPassword);
 
     /**
-	 * @api {put} /api/v1/blogs/forgotPassword Recover password by user email
+	 * @api {put} /api/v1/users/forgotPassword Recover password by user email
 	 * @apiVersion 0.0.1
 	 * @apiGroup edit
 	 *
@@ -222,7 +222,7 @@ module.exports.setRouter = (app) => {
     app.put(`${baseUrl}/resetPassword`, userController.resetPassword);
 
     /**
-	 * @api {put} /api/v1/blogs/resetPassword Reset password by password reset token
+	 * @api {put} /api/v1/users/resetPassword Reset password by password reset token
 	 * @apiVersion 0.0.1
 	 * @apiGroup edit
 	 *

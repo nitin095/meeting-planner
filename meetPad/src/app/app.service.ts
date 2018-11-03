@@ -9,6 +9,7 @@ import { Cookie } from 'ng2-cookies/ng2-cookies';
 export class AppService {
 
   private baseUrl = 'http://ec2-13-233-92-229.ap-south-1.compute.amazonaws.com/api/v1';
+  
   private authToken: string = Cookie.get('authtoken');
 
   constructor(private _http: HttpClient) {
@@ -65,16 +66,19 @@ export class AppService {
   }
 
   getUser(userId): Observable<any> {
+    this.authToken = Cookie.get('authtoken');
     let response = this._http.get(`${this.baseUrl}/users/${userId}/details?authToken=${this.authToken}`)
     return response
   }
 
   editUser(userType, userId, data): Observable<any> {
+    this.authToken = Cookie.get('authtoken');
     let response = this._http.put(`${this.baseUrl}/${userType}/${userId}/edit?authToken=${this.authToken}`, data)
     return response
   }
 
   deleteUser(userType, userId): Observable<any> {
+    this.authToken = Cookie.get('authtoken');
     let response = this._http.post(`${this.baseUrl}/${userType}/${userId}/delete?authToken=${this.authToken}`, '')
     return response
   }
@@ -86,6 +90,7 @@ export class AppService {
   }
 
   getAllUsers(authToken): Observable<any> {
+    this.authToken = Cookie.get('authtoken');
     let response = this._http.get(`${this.baseUrl}/users/view/all?authToken=${authToken}`)
     return response
   }

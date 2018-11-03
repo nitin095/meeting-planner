@@ -47,7 +47,7 @@ export class ProfileComponent implements OnInit {
   constructor(private router: Router, private appService: AppService, public snackBar: MatSnackBar) { }
 
   ngOnInit() {
-
+    console.log(this.userDetails)
     this.emailFormControl.disable();
     this.codeFormControl.disable();
     if (this.userDetails.adminId)
@@ -163,7 +163,7 @@ export class ProfileComponent implements OnInit {
             }
           );
         } else {
-          this.snackBar.open('Some error occured.', 'Close', { verticalPosition: 'top', horizontalPosition: 'end', duration: 4000, });
+          this.snackBar.open('Some error occured. Please refresh this page', 'Close', { verticalPosition: 'top', horizontalPosition: 'end', duration: 4000, });
           console.log(response)
         }
       },

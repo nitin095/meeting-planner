@@ -1,7 +1,7 @@
 //modules dependencies.
 const mongoose = require('mongoose');
 const shortid = require('shortid');
-const  schedule = require('node-schedule');
+const schedule = require('node-schedule');
 const time = require('./../libs/timeLib');
 const socketLib = require('./../libs/socketLib');
 const response = require('./../libs/responseLib');
@@ -11,6 +11,8 @@ const mailer = require('./../libs/mailer');
 
 // Models
 const MeetingModel = mongoose.model('Meeting')
+const UserModel = mongoose.model('User')
+
 
 // Get single meeting 
 let getMeeting = (req, res) => {
@@ -214,10 +216,19 @@ let createMeeting = (req, res) => {
             let apiResponse = response.generate(false, 'Meeting Created successfully', 200, result);
             res.send(apiResponse);
 
-            //sending New Meeting mail to all users and notification to online users after 30 seconds
+            //sending notification to online users
+            socketLib.sendAlert(result)
+
+            //sending New Meeting mail to all users after 30 seconds
             schedule.scheduleJob(time.getTimeAfter(0.5), function () {
-                socketLib.sendAlert(result)
-                mailer.sendNewMeetingMail(result)
+                for (let userId of result.invitees) {
+                    UserModel.findOne({ 'userId': userId })
+                        .select('email')
+                        .lean()
+                        .exec((err, data) => {
+                            mailer.sendNewMeetingMail(result, data.email)
+                        })
+                }//end for
             });
 
             //Scheduling Alerts 
@@ -225,7 +236,14 @@ let createMeeting = (req, res) => {
                 if (alert.alertType == 'email') {
                     console.log(`Email alert set: ${alert.minutes} minutes before.`);
                     schedule.scheduleJob(time.getTimeBefore(result.time.start, alert.minutes), function () {
-                        mailer.sendNotification(result)
+                        for (let userId of result.invitees) {
+                            UserModel.findOne({ 'userId': userId })
+                                .select('email')
+                                .lean()
+                                .exec((err, data) => {
+                                    mailer.sendNotification(result, data.email)
+                                })
+                        }//end for
                     });
                 } else {
                     console.log(`Notification alert set: ${alert.minutes} minutes before.`);
@@ -260,8 +278,16 @@ let editMeeting = (req, res) => {
         } else {
             let apiResponse = response.generate(false, 'Meeting details edited', 200, result)
             res.send(apiResponse);
+            socketLib.sendAlert(result)
             schedule.scheduleJob(time.getTimeAfter(1), function () {
-                mailer.sendMeetingUpdateMail(result)
+                for (let userId of result.invitees) {
+                    UserModel.findOne({ 'userId': userId })
+                        .select('email')
+                        .lean()
+                        .exec((err, data) => {
+                            mailer.sendMeetingUpdateMail(result, data.email)
+                        })
+                }//end for
             });
         }
     });
@@ -283,8 +309,17 @@ let deleteMeeting = (req, res) => {
             let apiResponse = response.generate(true, 'No meeting Found', 404, null)
             res.send(apiResponse)
         } else {
-            let apiResponse = response.generate(false, 'Meeting deleted successfully', 200, null)
-            res.send(apiResponse)
+            let apiResponse = response.generate(false, 'Meeting deleted successfully', 200, null);
+            res.send(apiResponse);
+            socketLib.sendAlert(result);
+            for (let userId of result.invitees) {
+                UserModel.findOne({ 'userId': userId })
+                    .select('email')
+                    .lean()
+                    .exec((err, data) => {
+                        mailer.sendMeetingCancelledMail(result, data.email)
+                    })
+            }//end for
         }
     });
 

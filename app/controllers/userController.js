@@ -125,7 +125,7 @@ let forgotPassword = (req, res) => {
             let apiResponse = response.generate(true, 'No Email Found', 404, null)
             res.send(apiResponse)
         } else {
-            mailer.sendForgotPasswordEmail(req.body.email, randomToken)
+            mailer.sendForgotPasswordEmail(req.body.email, randomToken, 'user')
             let apiResponse = response.generate(false, 'Password change requested', 200, result)
             res.send(apiResponse)
         }
@@ -161,7 +161,7 @@ let resetPassword = (req, res) => {
                 res.send(apiResponse)
             }
             else {
-                let apiResponse = response.generate(false, 'User passwod changed', 200, result)
+                let apiResponse = response.generate(false, 'User password changed', 200, result)
                 res.send(apiResponse)
             }
         })
@@ -240,7 +240,7 @@ let signUpFunction = (req, res) => {
             delete resolve.password;
             let apiResponse = response.generate(false, 'User created', 200, resolve);
             res.send(apiResponse);
-            mailer.sendWelcomeMail(resolve.userDetails);
+            mailer.sendWelcomeMail(resolve);
         })
         .catch((err) => {
             console.log(err);

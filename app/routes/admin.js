@@ -187,6 +187,68 @@ module.exports.setRouter = (app) => {
 	 */
 
 
+	app.put(`${baseUrl}/forgotPassword`, adminController.forgotPassword);
+
+    /**
+	 * @api {put} /api/v1/admin/forgotPassword Recover password by user email
+	 * @apiVersion 0.0.1
+	 * @apiGroup edit
+	 *
+	 * @apiParam {String} email email of the user passed as the Body parameter
+	 *
+	 *  @apiSuccessExample {json} Success-Response:
+	 *  {
+            error: false, 
+            message: "Password change requested", 
+            status: 200, 
+            data: {
+                n: 1
+                nModified: 1
+                ok: 1
+            }
+        }
+	  @apiErrorExample {json} Error-Response:
+	 *
+	 * {
+	    "error": true,
+	    "message": "Error Occured.,
+	    "status": 500,
+	    "data": null
+	   }
+	 */
+
+
+    app.put(`${baseUrl}/resetPassword`, adminController.resetPassword);
+
+    /**
+	 * @api {put} /api/v1/admin/resetPassword Reset password by password reset token
+	 * @apiVersion 0.0.1
+	 * @apiGroup edit
+	 *
+	 * @apiParam {String} token password reset token of the user passed as the Query parameter
+	 *
+	 *  @apiSuccessExample {json} Success-Response:
+	 *  {
+            error: false, 
+            message: "Password changed sucessfully", 
+            status: 200, 
+            data: {
+                n: 1
+                nModified: 1
+                ok: 1
+            }
+        }
+	  @apiErrorExample {json} Error-Response:
+	 *
+	 * {
+	    "error": true,
+	    "message": "Error Occured.,
+	    "status": 500,
+	    "data": null
+	   }
+	 */
+
+
     app.post(`${baseUrl}/:adminId/delete`, auth.isAuthorized, adminController.deleteAdmin);
 
      /**
