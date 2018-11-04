@@ -7,8 +7,21 @@
           <back-btn *ngIf="isAdmin" class="country-back-btn pr-2"></back-btn>
         </div>
         <div class="col-12 display-4" *ngIf="userName" style="line-height: 1em">{{userName}}</div>
-        <div class="col-12 lead">{{allMeetings.length}} upcoming meetings.</div>
       </div>
+      <div class="row text-center dashboard-item">
+        <div class="col-12 display-1 meeting-count">{{allMeetings.length}}</div>
+        <div class="col-12 lead">upcoming meetings</div>
+      </div>
+      <div class="row justify-content-center text-center dashboard-item">
+        <div class="col-12">Showing</div>
+        <div class="col-auto pt-2">
+          <mat-icon matRipple [matRippleCentered]="true" class="mx-2" style="color:purple;font-size: 1.3rem" (click)="toggleColor('purple')">{{getIcon('purple')}}</mat-icon>
+          <mat-icon matRipple [matRippleCentered]="true" class="mx-2" style="color:green;font-size: 1.3rem" (click)="toggleColor('green')">{{getIcon('green')}}</mat-icon>
+          <mat-icon matRipple [matRippleCentered]="true" class="mx-2" style="color:goldenrod;font-size: 1.3rem" (click)="toggleColor('yellow')">{{getIcon('yellow')}}</mat-icon>
+          <mat-icon matRipple [matRippleCentered]="true" class="mx-2" style="color:red;font-size: 1.3rem" (click)="toggleColor('red')">{{getIcon('red')}}</mat-icon>
+        </div>
+      </div>
+
     </div>
 
     <div class="col-12 col-md-9 calender-col">

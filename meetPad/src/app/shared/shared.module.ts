@@ -36,7 +36,7 @@ import {
     MatMenuModule,
     MatSnackBarModule,
     MatTooltipModule,
-    MatBadgeModule,
+    MatBadgeModule
   ],
   declarations: [BackBtnComponent],
   exports: [

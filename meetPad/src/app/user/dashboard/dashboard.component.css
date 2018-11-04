@@ -1,20 +1,41 @@
 @import url('https://fonts.googleapis.com/css?family=Work+Sans:400');
+.container-fluid{
+    height: 90vh;
+    overflow: hidden;
+}
 .detail-col{
+    height: 90vh;
+    overflow-y: auto;
     background-image: linear-gradient(to right, #4e2156, #633670, #784b8b, #8d62a8, #a279c5);
 }
 .name{
-    /* background-image: linear-gradient(to right top, #572b5e, #532958, #502853, #4c264d, #482548); */
     color: white;
     background: rgba(0,0,0,0.55)
 }
 .calender-col{
     -webkit-box-shadow: -6px 0px 39px -5px rgba(0,0,0,0.75);
--moz-box-shadow: -6px 0px 39px -5px rgba(0,0,0,0.75);
-box-shadow: -6px 0px 39px -5px rgba(0,0,0,0.75);
+    -moz-box-shadow: -6px 0px 39px -5px rgba(0,0,0,0.75);
+    box-shadow: -6px 0px 39px -5px rgba(0,0,0,0.75);
+    height: 90vh;
+    overflow-y: auto
 }
 .fc{
-    /* color: red!important; */
     font-family: 'Work Sans', sans-serif;
+}
+.dashboard-item{
+    background: rgba(255, 255, 255, 0.9);
+    margin: 1rem 0.8rem;
+    padding: 0.5rem;  
+    color: #e46744   
+}
+mat-icon{
+    cursor: pointer;
+}
+.dashboard-item .lead{
+    font-weight: 400
+}
+.meeting-count{
+
 }
 .create-meeting-button{
     position: sticky;

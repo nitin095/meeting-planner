@@ -20,7 +20,7 @@ let sendWelcomeMail = (userDetails) => {
         subject: `${userDetails.firstName}, welcome to your new Meet Pad Account`,
         html: `<div style="background:whitesmoke;margin:50px;padding:15px;text-align:center"><h1>Hi ${userDetails.firstName}</h1><p>Your account has been created.
         Please login to view your meetings.</p>
-        <p><button style="background:none;padding:5px 10px"><a href="http://ec2-13-233-119-109.ap-south-1.compute.amazonaws.com">LOGIN</a></button></p>
+        <p><a href="http://ec2-13-233-119-109.ap-south-1.compute.amazonaws.com"><button style="background:none;padding:5px 10px">LOGIN</button></a></p>
         <p><h4>Here’s what we have on file for you:</h4>
         Name: ${userDetails.firstName} ${userDetails.lastName}<br>Email: ${userDetails.email}<br>Phone: +${userDetails.countryCode} ${userDetails.mobileNumber}</p>
         <p>Yours sincerely<br>Meet Pad</p>

@@ -18,8 +18,7 @@ export class AppComponent implements OnInit {
   faGithubSquare = faGithubSquare;
   title = 'app';
   public url: string = "";
-  private isAdmin: boolean;
-  public userDetails = this.appService.getUserInfoFromLocalstorage();
+  public userDetails: any;
 
   constructor(private router: Router, private appService: AppService, public snackBar: MatSnackBar) {
     router.events.subscribe((val) => {
@@ -28,22 +27,25 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    let adminId = this.userDetails.adminId;
-    if (adminId){
-      this.isAdmin = true}
-    else false
+  }
+
+  public getUserName(): string {
+    this.userDetails = this.appService.getUserInfoFromLocalstorage();
+    return this.userDetails ? this.userDetails.firstName : 'Account'
   }
 
   public goToDashboard(): any {
-    if (this.isAdmin)
+    this.userDetails = this.appService.getUserInfoFromLocalstorage();
+    if (this.userDetails.hasOwnProperty('adminId'))
       this.router.navigate(['admin/dashboard'])
     else
       this.router.navigate(['dashboard'])
   }
 
   public logout: any = () => {
+    this.userDetails = this.appService.getUserInfoFromLocalstorage();
     let userType = 'users';
-    if (this.userDetails.adminId)
+    if (this.userDetails.hasOwnProperty('adminId'))
       userType = 'admin';
     this.appService.logout(userType).subscribe((apiResponse) => {
       if (apiResponse.status === 200) {

@@ -24,6 +24,8 @@ export class DashboardComponent implements OnInit {
   public userId: string;
   public userName: string;
   public allMeetings: any = [];
+  public filteredMeetings: any = [];
+  public selectedMeetingColors: any = ['purple','green','red','yellow'];
   public isAdmin: boolean;
 
   calendarOptions: Options;
@@ -60,7 +62,19 @@ export class DashboardComponent implements OnInit {
             resolve(response.data)
           } else {
             console.log(response.message)
-            reject('error occured in geetig meetings')
+            this.calendarOptions = {
+              editable: false,
+              eventLimit: false,
+              header: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay,listMonth'
+              },
+              timezone: 'local',
+              eventTextColor: 'white',
+              timeFormat: 'h(:mm)t',
+              height: 'parent'
+            };//end calenderOptions
           }
         },
         error => {
@@ -113,8 +127,40 @@ export class DashboardComponent implements OnInit {
     this.ucCalendar.fullCalendar('gotoDate', event.date);
   }
 
+  toggleColor = (color) => {
+    if (!this.selectedMeetingColors.includes(color))
+      this.selectedMeetingColors.push(color)
+    else
+      this.selectedMeetingColors.splice(this.selectedMeetingColors.indexOf(color), 1);
+    this.filterMeetings(this.selectedMeetingColors)
+  }
+
+  getIcon = (color) => {
+    if (!this.selectedMeetingColors.includes(color))
+      return 'check_box_outline_blank'
+    else
+      return 'check_box'
+  }
+
+  filterMeetings = (colors) => {
+    this.filteredMeetings = this.allMeetings.filter(meeting => {
+      return colors.includes(meeting.meetingColor)
+    });
+    let meetings = Object.keys(this.filteredMeetings).map(i => this.filteredMeetings[i])
+    let events = [];
+    for (let meeting of meetings) {
+      events.push({
+        title: meeting.title,
+        start: meeting.time.start,
+        meetingId: meeting.meetingId,
+        color: meeting.meetingColor
+      });
+    }
+    this.ucCalendar.fullCalendar('removeEvents');
+    this.ucCalendar.fullCalendar('addEventSource', events);
+  }//end filterMeetings
+
   private getUser = (uid) => {
-    console.log('getUser called with uid: ' + uid)
     this.appService.getUser(uid).subscribe(
       response => {
         console.log(response)
