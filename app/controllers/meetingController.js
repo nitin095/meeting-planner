@@ -216,20 +216,28 @@ let createMeeting = (req, res) => {
             let apiResponse = response.generate(false, 'Meeting Created successfully', 200, result);
             res.send(apiResponse);
 
-            //sending notification to online users
-            socketLib.sendAlert(result)
+            //sending notification to invitees of meeting
+            let alertMessage = {
+                type: 'alert',
+                event: 'New Meeting',
+                title: result.title,
+                time: result.time.start,
+                id: result.meetingId,
+                invitees: result.invitees
+            }
+            socketLib.sendAlert(alertMessage)
 
-            //sending New Meeting mail to all users after 30 seconds
-            schedule.scheduleJob(time.getTimeAfter(0.5), function () {
-                for (let userId of result.invitees) {
-                    UserModel.findOne({ 'userId': userId })
-                        .select('email')
-                        .lean()
-                        .exec((err, data) => {
+            for (let userId of result.invitees) {
+                UserModel.findOne({ 'userId': userId })
+                    .select('email')
+                    .lean()
+                    .exec((err, data) => {
+                        //sending New Meeting mail to all users after 30 seconds
+                        schedule.scheduleJob(time.getTimeAfter(0.5), function () {
                             mailer.sendNewMeetingMail(result, data.email)
-                        })
-                }//end for
-            });
+                        });
+                    })
+            }//end for
 
             //Scheduling Alerts 
             for (let alert of result.alerts) {
@@ -247,11 +255,14 @@ let createMeeting = (req, res) => {
                     });
                 } else {
                     console.log(`Notification alert set: ${alert.minutes} minutes before.`);
+                    alertMessage.type = 'notification';
+                    alertMessage.event = "Notification";
                     schedule.scheduleJob(time.getTimeBefore(result.time.start, alert.minutes), function () {
-                        socketLib.sendAlert(result)
+                        socketLib.sendAlert(alertMessage)
                     });
                 }
-            }
+            }//end for
+
         })
         .catch((error) => {
             console.log(error)
@@ -278,19 +289,33 @@ let editMeeting = (req, res) => {
         } else {
             let apiResponse = response.generate(false, 'Meeting details edited', 200, result)
             res.send(apiResponse);
-            socketLib.sendAlert(result)
-            schedule.scheduleJob(time.getTimeAfter(1), function () {
-                for (let userId of result.invitees) {
-                    UserModel.findOne({ 'userId': userId })
-                        .select('email')
-                        .lean()
-                        .exec((err, data) => {
+
+            //sending notification to invitees of meeting
+            let alertMessage = {
+                type: 'alert',
+                event: 'Meeting Updated',
+                title: result.title,
+                time: result.time.start,
+                id: result.meetingId,
+                invitees: result.invitees
+            };
+            socketLib.sendAlert(alertMessage);
+
+            //send email
+            for (let userId of result.invitees) {
+                UserModel.findOne({ 'userId': userId })
+                    .select('email')
+                    .lean()
+                    .exec((err, data) => {
+                        //sending email
+                        schedule.scheduleJob(time.getTimeAfter(1), function () {
                             mailer.sendMeetingUpdateMail(result, data.email)
-                        })
-                }//end for
-            });
-        }
-    });
+                        });
+                    })
+            }//end for
+
+        }//end else
+    });//end MeetingModel update
 
 }// end edit user
 
@@ -311,7 +336,19 @@ let deleteMeeting = (req, res) => {
         } else {
             let apiResponse = response.generate(false, 'Meeting deleted successfully', 200, null);
             res.send(apiResponse);
-            socketLib.sendAlert(result);
+
+            //sending notification to invitees of meeting
+            let alertMessage = {
+                type: 'alert',
+                event: 'Meeting Deleted',
+                title: result.title,
+                time: result.time.start,
+                id: result.meetingId,
+                invitees: result.invitees
+            };
+            socketLib.sendAlert(alertMessage);
+
+            //sending email
             for (let userId of result.invitees) {
                 UserModel.findOne({ 'userId': userId })
                     .select('email')

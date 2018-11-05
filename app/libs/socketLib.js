@@ -52,14 +52,16 @@ let setServer = (server) => {
 
         eventEmitter.on('alert', (data) => {
             console.log('emitting alert')
-            socket.to(socket.room).broadcast.emit('alert', data)
+            for (let id of data.invitees) {
+                socket.emit(id, data);
+            }
         })//end eventEmitter on alert
 
     });//end myTo
 
 }//end setServer
 
-// function to emit scheduled alert
+// function to emit  alert
 let sendAlert = (alert) => {
     eventEmitter.emit('alert', alert)
 }

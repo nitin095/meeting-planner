@@ -10,6 +10,7 @@ import { MatSnackBar } from '@angular/material';
 import { CalendarComponent } from 'ng-fullcalendar';
 import { Options } from 'fullcalendar';
 
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -25,8 +26,9 @@ export class DashboardComponent implements OnInit {
   public userName: string;
   public allMeetings: any = [];
   public filteredMeetings: any = [];
-  public selectedMeetingColors: any = ['purple','green','red','yellow'];
+  public selectedMeetingColors: any = ['purple', 'green', 'red', 'yellow'];
   public isAdmin: boolean;
+  public alert: any;
 
   calendarOptions: Options;
   @ViewChild(CalendarComponent) ucCalendar: CalendarComponent;
@@ -201,11 +203,15 @@ export class DashboardComponent implements OnInit {
     this.SocketService.notificationAlert().subscribe((data) => {
       console.log('ALERT RECEIVED FROM SERVER!')
       console.log(data);
-      let alertSnackBar = this.snackBar.open(`${data.title} @ ${data.time.start}`, 'Close', { verticalPosition: 'top', horizontalPosition: 'end', duration: 4000, });
-      alertSnackBar.afterDismissed().subscribe(() => {
-        console.log('The snack-bar was dismissed');
-      });
+      this.alert = { type: data.type, event: data.event, title: data.title, time: data.time, id: data.id, display: true }
     });
   }//end getAlerts
+
+  public snooze(): any {
+    this.alert.display = false;
+    setTimeout(() => {
+      this.alert.display = true;
+    }, 5000);
+  }
 
 }

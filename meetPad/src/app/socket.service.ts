@@ -14,10 +14,12 @@ export class SocketService {
 
   private url = 'http://ec2-13-233-92-229.ap-south-1.compute.amazonaws.com';
 
+  private receiverId: string = Cookie.get('receiverId');
   private socket;
 
   constructor(public http: HttpClient) {
     this.socket = io(this.url);
+
   }
 
   // Listening events 
@@ -36,16 +38,16 @@ export class SocketService {
       this.socket.on("onlineUserList", (userList) => {
         observer.next(userList);
       });
-    }); 
+    });
   } // end onlineUserList
 
   public notificationAlert = () => {
-    console.log('listening alerts from server')
+    console.log('listening alerts from server for receiverId: ' + this.receiverId)
     return Observable.create((observer) => {
-      this.socket.on("alert", (alert) => {
+      this.socket.on(this.receiverId, (alert) => {
         observer.next(alert);
       });
-    }); 
+    });
   } // end notificationAlert
 
   public disconnectedSocket = () => {
@@ -53,7 +55,7 @@ export class SocketService {
       this.socket.on("disconnect", () => {
         observer.next();
       });
-    }); 
+    });
   } // end disconnectSocket
 
 
@@ -62,10 +64,6 @@ export class SocketService {
   public setUser = (authToken) => {
     this.socket.emit("set-user", authToken);
   } // end setUser
-
-  public markChatAsSeen = (userDetails) => {
-    this.socket.emit('mark-chat-as-seen', userDetails);
-  } // end markChatAsSeen
 
 
 }//end Class SocketService

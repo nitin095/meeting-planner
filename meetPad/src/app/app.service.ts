@@ -8,8 +8,8 @@ import { Cookie } from 'ng2-cookies/ng2-cookies';
 })
 export class AppService {
 
-  private baseUrl = 'http://ec2-13-233-92-229.ap-south-1.compute.amazonaws.com/api/v1';
-  
+  private baseUrl = 'http://localhost:3000/api/v1';
+
   private authToken: string = Cookie.get('authtoken');
 
   constructor(private _http: HttpClient) {
@@ -21,7 +21,7 @@ export class AppService {
     console.log(err.message);
     return Observable.throw(err.message)
   }
-  
+
   public getUserInfoFromLocalstorage = () => {
     return JSON.parse(localStorage.getItem('userInfo'));
   }

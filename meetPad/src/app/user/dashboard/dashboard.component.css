@@ -68,3 +68,24 @@ mat-icon{
     -moz-box-shadow: 0px 0px 0px 8px rgba(228,103,68,1);
     box-shadow: 0px 0px 0px 8px rgb(241, 209, 200);
 }
+.notification{
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    margin: 1rem;
+    padding: 0.5rem 1rem;
+    padding-bottom: 0;
+    background: rgba(0,0,0,0.75);
+    color: white;
+    z-index: 1;
+    width: 25vw;
+}
+.notification mat-icon{
+   font-size: 1.2rem;
+}
+.notification .button{
+    cursor: pointer;
+}
+.notification .button:hover{
+    background: rgba(255,255,255,0.45);
+}
