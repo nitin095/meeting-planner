@@ -15,7 +15,7 @@
         </mat-form-field>
         <mat-form-field class="col-5">
           <input matInput [owlDateTime]="dt1" [min]="min" required [owlDateTimeTrigger]="dt1" [(ngModel)]="start"
-            placeholder="Starts">
+            placeholder="Starts" [ngModelOptions]="{standalone: true}">
           <owl-date-time #dt1></owl-date-time>
         </mat-form-field>
         <mat-form-field class="col-5">

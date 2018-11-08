@@ -35,12 +35,10 @@ export class DashboardComponent implements OnInit {
   }
 
   getAllMeetings(): any {
-    console.log('runing getAllMeetings. getting deatils for admin: ' + this.adminDetails.adminId)
-    this.appService.getAllAdminMeetings(this.adminDetails.adminId).subscribe(
 
+    this.appService.getAllAdminMeetings(this.adminDetails.adminId).subscribe(
       response => {
         if (response.status === 200) {
-          console.log(response);
           this.allMeetings = response.data
         } else {
           console.log(response.message)
@@ -51,18 +49,15 @@ export class DashboardComponent implements OnInit {
         console.log("some error occured");
         console.log(error)
       }
-
     )
 
   }//end getAllMeetings function
 
   getAllUsers(): any {
-    console.log('running getAllUsers.')
-    this.appService.getAllUsers(Cookie.get('authtoken')).subscribe(
 
+    this.appService.getAllUsers(Cookie.get('authtoken')).subscribe(
       response => {
         if (response.status === 200) {
-          console.log(response);
           this.allUsers = response.data
         } else {
           console.log("Couldn't get users")
@@ -78,7 +73,6 @@ export class DashboardComponent implements OnInit {
         console.log("some error occured");
         console.log(error)
       }
-
     )
 
   }//end getAllUsers function
@@ -86,15 +80,12 @@ export class DashboardComponent implements OnInit {
 
   public verifyUserConfirmation: any = () => {
 
-    console.log('INSIDE VerifyUserConfirmation FUNCTION IN DASHBOARD COMPONENT')
-    console.log(this.authToken)
-    console.log(this.adminDetails.adminId)
     this.SocketService.verifyUser()
       .subscribe((data) => {
         // this.disconnectedSocket = false;
         this.SocketService.setUser(this.authToken);
       });
-  }
+  }//end verifyUserConformation
 
   public getOnlineUsers(): any {
     this.SocketService.onlineUserList().subscribe(data => {

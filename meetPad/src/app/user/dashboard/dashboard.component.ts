@@ -26,7 +26,7 @@ export class DashboardComponent implements OnInit {
   public userName: string;
   public allMeetings: any = [];
   public filteredMeetings: any = [];
-  public selectedMeetingColors: any = ['purple', 'green', 'red', 'yellow'];
+  public selectedMeetingColors: any = ['purple', 'green', 'red', 'goldenrod'];
   public isAdmin: boolean;
   public alert: any;
 
@@ -36,6 +36,7 @@ export class DashboardComponent implements OnInit {
   constructor(private _route: ActivatedRoute, private router: Router, private appService: AppService, public snackBar: MatSnackBar, public SocketService: SocketService) { }
 
   ngOnInit() {
+
     this._route.queryParams.subscribe(params => {
       if (params['uid']) {
         this.isAdmin = true
@@ -49,8 +50,11 @@ export class DashboardComponent implements OnInit {
     });
     this.authToken = Cookie.get('authtoken');
     this.loadCalender();
-    this.verifyUserConfirmation();
-    this.getAlerts();
+    if (!this.isAdmin) {
+      this.verifyUserConfirmation();
+      this.getAlerts();
+    }
+
   }
   //end ngOnInit
 
@@ -89,8 +93,10 @@ export class DashboardComponent implements OnInit {
     getMeetings.then((data) => {
       let meetings = Object.keys(data).map(i => data[i])
       this.calendarOptions = {
-        editable: false,
-        eventLimit: false,
+        editable: this.isAdmin,
+        selectable: this.isAdmin,
+        nowIndicator: true,
+        // eventLimit: false,
         header: {
           left: 'prev,next today',
           center: 'title',
@@ -118,15 +124,22 @@ export class DashboardComponent implements OnInit {
   }
 
   eventClick = (meeting) => {
-    console.log(meeting.event);
     this.router.navigate(['meeting', meeting.event.meetingId]);
   }
 
   dayClick = (event) => {
-    if (event.view.name != 'month')
-      return;
-    this.ucCalendar.fullCalendar('changeView', 'agendaDay')
-    this.ucCalendar.fullCalendar('gotoDate', event.date);
+    if (event.view.name !== 'month') {
+      return
+    } else {
+      this.ucCalendar.fullCalendar('changeView', 'agendaDay')
+      this.ucCalendar.fullCalendar('gotoDate', event.date);
+    }
+  }
+
+  select = (event) => {
+    if (this.isAdmin && event.view.name !== "month") {
+      this.router.navigate([`/admin/meeting/create`], { queryParams: { start: event.start._d, end: event.end._d } });
+    }
   }
 
   toggleColor = (color) => {
@@ -162,18 +175,58 @@ export class DashboardComponent implements OnInit {
     this.ucCalendar.fullCalendar('addEventSource', events);
   }//end filterMeetings
 
+  updateMeeting = (meeting) => {
+    console.log(meeting.meetingId)
+    let meetingTime = {
+      time: {
+        start: meeting.start ? new Date(meeting.start._d).toISOString() : null,
+        end: meeting.end ? new Date(meeting.end._d).toISOString() : null
+      }
+    }
+    this.appService.editMeeting(meeting.meetingId, meetingTime).subscribe(
+      response => {
+        if (response.status == 200) {
+          this.snackBar.open(`"${meeting.title}" updated!`, 'Close', { verticalPosition: 'top', horizontalPosition: 'end', duration: 4000, });
+          console.log(response)
+        }
+      },
+      error => {
+        this.snackBar.open(`Cannot update "${meeting.title}". ${error.errorMessage}`, 'Close', { verticalPosition: 'top', horizontalPosition: 'end', duration: 4000, });
+      }
+    )
+  }//end updateMeeting 
+
   private getUser = (uid) => {
     this.appService.getUser(uid).subscribe(
       response => {
-        console.log(response)
         this.userDetails = response.data;
         this.userName = `${response.data.firstName} ${response.data.lastName}`
       },
       error => {
-        console.log(`ERROE! ${error.errorMessage}`)
+        console.log(`ERROR! ${error.errorMessage}`)
       }
     )
   }
+
+
+  private refreshCalender() {
+    this.appService.getAllMeetings(this.userId).subscribe(
+      response => {
+        if (response.status === 200) {
+          this.allMeetings = response.data;
+          this.filterMeetings(this.selectedMeetingColors)
+        } else {
+          this.allMeetings = [];
+          this.ucCalendar.fullCalendar('removeEvents');
+        }
+      },
+      error => {
+        console.log("some error occured");
+        console.log(error)
+      }
+    )
+  }
+
 
   public logout: any = () => {
     this.appService.logout('users').subscribe((apiResponse) => {
@@ -192,6 +245,7 @@ export class DashboardComponent implements OnInit {
     });
   } // end logout
 
+
   public verifyUserConfirmation: any = () => {
     this.SocketService.verifyUser()
       .subscribe((data) => {
@@ -199,13 +253,18 @@ export class DashboardComponent implements OnInit {
       });
   }
 
+
   public getAlerts(): any {
     this.SocketService.notificationAlert().subscribe((data) => {
       console.log('ALERT RECEIVED FROM SERVER!')
       console.log(data);
       this.alert = { type: data.type, event: data.event, title: data.title, time: data.time, id: data.id, display: true }
+      if (data.event == 'New Meeting' || data.event == 'Meeting Deleted') {
+        this.refreshCalender()
+      }
     });
   }//end getAlerts
+
 
   public snooze(): any {
     this.alert.display = false;

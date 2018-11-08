@@ -35,24 +35,20 @@ export class MeetingDetailsComponent implements OnInit {
 
     this.appService.getMeetingDetails(meetingId).subscribe(
       response => {
-        console.log(response)
         this.meetingDetails = response.data;
         this.getCreator(response.data.creator);
         this.getInvitees(response.data.invitees)
       },
       error => {
-        console.log(error.errorMessage)
+        console.log(error)
       }
     )//end subscribe
 
   }//end getMeeting
 
   getCreator = (creatorId) => {
-    
-    console.log('inside grtcreator. AdminId is '+creatorId)
     this.appService.getAdmin(creatorId).subscribe(
       response => {
-        console.log(response)
         this.creator = response.data
       },
       error => {
@@ -62,8 +58,6 @@ export class MeetingDetailsComponent implements OnInit {
   }//end getCreator
 
   getInvitees = (userIds) => {
-
-    // this.invitees = new Array;
 
     for (let id of userIds) {
       this.appService.getUser(id).subscribe(

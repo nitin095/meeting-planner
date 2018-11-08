@@ -35,16 +35,30 @@ export class MeetingDetailsComponent implements OnInit {
   constructor(private _route: ActivatedRoute, private router: Router, private routeLocation: Location, private appService: AppService, public snackBar: MatSnackBar) { }
 
   ngOnInit() {
+    let startTime;
+    let endTime;
     this._route.params.subscribe(params => {
       this.meetingId = this._route.snapshot.paramMap.get('meetingId');
+      startTime = this._route.snapshot.queryParamMap.get('start');
+      endTime = this._route.snapshot.queryParamMap.get('end');
     });
+    this.setTime(startTime, endTime);
     this.getAllUsers();
     this.invitees = new Array;
     this.alerts = new Array;
     this.chipColor = 'warn';
     this.alerts.push({ type: 'email', number: 30, timeType: 'minutes' });
     this.alerts.push({ type: 'notification', number: 1, timeType: 'minutes' });
-  }
+  }//end ngOnInit
+
+  setTime(start, end): any {
+    if (start && end) {
+      let startTime = new Date(start).toISOString();
+      let endTime = new Date(end).toISOString();
+      this.start = startTime;
+      this.end = endTime
+    }
+  }//end setTime
 
   getAllUsers(): any {
     this.appService.getAllUsers(Cookie.get('authtoken')).subscribe(
@@ -68,7 +82,6 @@ export class MeetingDetailsComponent implements OnInit {
     )
   }//end getAllUsers function
 
-
   addInvitee(user) {
     if (!this.invitees.includes(user))
       this.invitees.push(user);
@@ -85,37 +98,37 @@ export class MeetingDetailsComponent implements OnInit {
       return true
     else
       return false
-  }
+  }//end isSelected
 
   selectColor(color) {
     this.meetingColor = color;
-  }
+  }//end selectColor
 
   createMeeting() {
 
     if (!this.title || !this.start || this.invitees.length < 1) {
-      console.log('fill required values')
+      this.snackBar.open('Fill required values', 'Close', { verticalPosition: 'top', horizontalPosition: 'end', duration: 4000, });
     } else {
       let minutes = { 'minutes': 1, 'hours': 60, 'days': 1440 };
       let inviteesId = this.invitees.map(invitee => invitee.userId);
       let emailAlerts = this.alerts.map(alert => alert.type == 'email' ? alert.number * minutes[alert.timeType] : null)
       let notificationAlerts = this.alerts.map(alert => alert.type == 'notification' ? alert.number * minutes[alert.timeType] : null)
 
-      let meetingData = {
-        creator: Cookie.get('receiverId'),
-        title: this.title,
-        notes: this.notes,
-        startTime: this.start,
-        endTime: this.end,
-        location: this.location,
-        emailAlerts: emailAlerts.toString(),
-        notificationAlerts: notificationAlerts.toString(),
-        invitees: inviteesId.toString(),
-        meetingColor: this.meetingColor
-      }
-      console.log(meetingData)
-
       if (!this.meetingId) {
+
+        let meetingData = {
+          creator: Cookie.get('receiverId'),
+          title: this.title,
+          notes: this.notes,
+          startTime: this.start,
+          endTime: this.end,
+          location: this.location,
+          emailAlerts: emailAlerts.toString(),
+          notificationAlerts: notificationAlerts.toString(),
+          invitees: inviteesId.toString(),
+          meetingColor: this.meetingColor
+        }
+        console.log(meetingData)
 
         this.appService.createMeeting(meetingData).subscribe(
           response => {
@@ -132,7 +145,24 @@ export class MeetingDetailsComponent implements OnInit {
         )
       } else {
 
-        this.appService.editMeeting(this.meetingId, meetingData).subscribe(
+        let updateAlerts = [];
+        let updateInvitees = inviteesId.toString();
+        for(let alert of this.alerts){
+          updateAlerts.push({alertType: alert.type, minutes: alert.number*minutes[alert.timeType] })
+        }
+
+        let meetingUpdateData = {
+          title: this.title,
+          notes: this.notes,
+          time: { start: this.start, end: this.end },
+          location: this.location,
+          meetingColor: this.meetingColor,
+          alerts: updateAlerts,
+          invitees: (updateInvitees != undefined && updateInvitees != null) ? updateInvitees.split(',') : []
+        }
+        console.log(meetingUpdateData)
+        
+        this.appService.editMeeting(this.meetingId, meetingUpdateData).subscribe(
           response => {
             this.snackBar.open('Meeting edited sucessfully', 'Close', { verticalPosition: 'top', horizontalPosition: 'end', duration: 4000, });
             console.log('meeting edited sucessfully');
@@ -153,11 +183,11 @@ export class MeetingDetailsComponent implements OnInit {
 
   addAlert() {
     this.alerts.push({ type: 'email', number: 10, timeType: 'minutes' });
-  }
+  }//end addAlert
 
   removeAlert(alert) {
     this.alerts.splice(this.alerts.indexOf(alert), 1);
-  }
+  }//end removeAlert
 
   getMeeting = (meetingId) => {
     console.log('getting details for ' + meetingId)
@@ -188,6 +218,5 @@ export class MeetingDetailsComponent implements OnInit {
 
 
   }//end getMeeting
-
 
 }

@@ -354,7 +354,11 @@ let deleteMeeting = (req, res) => {
                     .select('email')
                     .lean()
                     .exec((err, data) => {
-                        mailer.sendMeetingCancelledMail(result, data.email)
+                        if (err) {
+                            console.log(err)
+                            logger.error(err.message, 'meeting Controller: deleteMeeting > sending mail', 5)
+                        } else
+                            mailer.sendMeetingCancelledMail(result, data.email)
                     })
             }//end for
         }

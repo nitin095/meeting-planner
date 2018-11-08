@@ -17,7 +17,7 @@
         <div class="col-auto pt-2">
           <mat-icon matRipple [matRippleCentered]="true" class="mx-2" style="color:purple;font-size: 1.3rem" (click)="toggleColor('purple')">{{getIcon('purple')}}</mat-icon>
           <mat-icon matRipple [matRippleCentered]="true" class="mx-2" style="color:green;font-size: 1.3rem" (click)="toggleColor('green')">{{getIcon('green')}}</mat-icon>
-          <mat-icon matRipple [matRippleCentered]="true" class="mx-2" style="color:goldenrod;font-size: 1.3rem" (click)="toggleColor('yellow')">{{getIcon('yellow')}}</mat-icon>
+          <mat-icon matRipple [matRippleCentered]="true" class="mx-2" style="color:goldenrod;font-size: 1.3rem" (click)="toggleColor('goldenrod')">{{getIcon('goldenrod')}}</mat-icon>
           <mat-icon matRipple [matRippleCentered]="true" class="mx-2" style="color:red;font-size: 1.3rem" (click)="toggleColor('red')">{{getIcon('red')}}</mat-icon>
         </div>
       </div>
@@ -26,8 +26,8 @@
 
     <div class="col-12 col-md-9 calender-col">
       <div *ngIf="calendarOptions" style="height:90vh;">
-        <ng-fullcalendar #ucCalendar [options]="calendarOptions" (eventClick)="eventClick($event.detail)" (eventDrop)="updateEvent($event.detail)"
-          (eventResize)="updateEvent($event.detail)" (dayClick)="dayClick($event.detail)"></ng-fullcalendar>
+        <ng-fullcalendar #ucCalendar [options]="calendarOptions" (eventClick)="eventClick($event.detail)" (eventResize)="updateMeeting($event.detail.event)"
+          (dayClick)="dayClick($event.detail)" (select)="select($event.detail)" (eventDrop)="updateMeeting($event.detail.event)"></ng-fullcalendar>
       </div>
 
       <button *ngIf="isAdmin" class="create-meeting-button" matTooltip="Create new meeting" [routerLink]="['/admin/meeting/create']">+</button>
@@ -38,31 +38,31 @@
   <!-- end row -->
 
   <div class="notification" *ngIf="alert && alert.display == true">
-      <div class="row align-items-center justify-content-center">
-        <div class="col-12 heading">{{alert.event}}</div>
-        <div class="col-12 lead">{{alert.title}}</div>
-        <small class="col-12 pb-3">{{alert.time}}</small>
-        <div matRipple class="col-6 button py-2" (click)="alert = undefined">
-          <div class="row text-center justify-content-center">
-            <mat-icon class="col-12">cancel</mat-icon>
-            <small class="col-12">Dismiss</small>
-          </div>
+    <div class="row align-items-center justify-content-center">
+      <div class="col-12 heading">{{alert.event}}</div>
+      <div class="col-12 lead">{{alert.title}}</div>
+      <small class="col-12 pb-3">{{alert.time}}</small>
+      <div matRipple class="col-6 button py-2" (click)="alert = undefined">
+        <div class="row text-center justify-content-center">
+          <mat-icon class="col-12">cancel</mat-icon>
+          <small class="col-12">Dismiss</small>
         </div>
-        <div matRipple class="col-6 button py-2" *ngIf="alert.event !== 'Meeting Deleted'" [routerLink]="['/meeting',alert.id]">
-          <div class="row text-center">
-              <mat-icon class="col-12">info</mat-icon>
-              <small class="col-12">Details</small>
-          </div>
+      </div>
+      <div matRipple class="col-6 button py-2" *ngIf="alert.event !== 'Meeting Deleted'" [routerLink]="['/meeting',alert.id]">
+        <div class="row text-center">
+          <mat-icon class="col-12">info</mat-icon>
+          <small class="col-12">Details</small>
         </div>
-        <div matRipple class="col-6 button py-2" *ngIf="alert.type == 'notification'" (click)="snooze()">
-            <div class="row text-center">
-                <mat-icon class="col-12">snooze</mat-icon>
-                <small class="col-12">Snooze</small>
-            </div>
-          </div>
+      </div>
+      <div matRipple class="col-6 button py-2" *ngIf="alert.type == 'notification'" (click)="snooze()">
+        <div class="row text-center">
+          <mat-icon class="col-12">snooze</mat-icon>
+          <small class="col-12">Snooze</small>
+        </div>
       </div>
     </div>
-    <!-- end notification -->
+  </div>
+  <!-- end notification -->
 
 </div>
 <!-- end container-fluid -->
